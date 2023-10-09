@@ -55,6 +55,7 @@ enabled = false
 package_json_path = 'package.json'
 package_lock_json_path = 'package-lock.json'
 ```
+
 > [!NOTE]
 > `[tool.json]`
 > Option added so it can use in a javascript projects later.
@@ -66,10 +67,11 @@ package_lock_json_path = 'package-lock.json'
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
 ```
+
 > [!NOTE]
 > `[[tool.semantic_release]`
 > If you are not using python, then disable this line, lave the rest
-```
+
 
 <br/><br/>
 
