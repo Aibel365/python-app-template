@@ -11,46 +11,60 @@ Atm 4 actions:
 
 ## Update `semantic-release.toml`
 
-
 ```toml
 [tool.docker]
 enabled = true
 image_name = "app-python"
 team_name = "python-team"
-# INFO:
-# for bulding docker image, se to false if not needed
-# expects to find these under github repo secrets
-# secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY 
-# secrets.AZURE_CLINET_ID_CONTAINER_REGISTRY
-# secrets.AZURE_CLIENT_SECRET_CONTAINER_REGISTR
+```
+> [!NOTE]
+> `[tool.docker]`
+> For building docker image, set to false if not needed
+>
+> This expects to find these under github repo secrets
+> secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY 
+> secrets.AZURE_CLINET_ID_CONTAINER_REGISTRY
+> secrets.AZURE_CLIENT_SECRET_CONTAINER_REGISTR
 
+
+
+```toml
 [tool.gitops]
 enabled = true
 repo = "VegarRingdalAibel/simple_action"
 file = "test.yaml"
 kind = "Deployment"
 image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]'
-# INFO:
-# updating gitops with new image version based on github action jobid
-# expects to find these under github repo secrets
-# secrets.GITOPS_KEY
-# this key needs to be deloy key with write priv
+```
 
+> [!NOTE]
+> `[tool.gitops]`
+> Updating a gitops with new image version based on github action jobid
+> USE ONLY ON TEST!!!
+>
+> This expects to find these under github repo secrets
+> secrets.GITOPS_KEY
+> This key needs to be a deploy key with write privileges
+
+```toml
 [tool.json]
 enabled = false
 package_json_path = 'package.json'
 package_lock_json_path = 'package-lock.json'
-# info
-# work added so I could use with in my javacsript projects later
-# you want to disable this for python projects
+```
+> [!NOTE]
+> `[tool.json]`
+> Option added so it can use in a javascript projects later.
+> You want to disable this for python projects
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
-# info
-# if you are not using python, then disable this line
+> [!NOTE]
+> `[[tool.semantic_release]`
+# If you are not using python, then disable this line, lave the rest
 ```
 
-Sample `pyproject.toml` :
+Sample `pyproject.toml`, if this is set in `[tool.semantic_release]` section, version gets updated
 ```toml
 [project]
 name = "app-python"
