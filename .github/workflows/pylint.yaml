@@ -1,0 +1,45 @@
+name: Lint Python
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited, labeled ]
+    branches:
+      - main
+
+jobs:
+  lintCheck:
+    name: Python Lint Pull Request
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+       #####################################################################################################################
+
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+     #####################################################################################################################
+
+      - name: Checkout git
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+     #####################################################################################################################
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint==3.0.0
+          pip install -r requirements.txt
+
+     #####################################################################################################################
+
+      - name: Analysing the code with pylint
+        run: |
+          pylint $(git ls-files '*.py')

@@ -1,0 +1,7 @@
+.github
+.env
+venv
+.vscode
+__pycache__
+README.md
+pyproject.toml
