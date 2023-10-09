@@ -8,6 +8,7 @@ Atm 4 actions:
 - Generate release
 - Make test image (manual)
 
+<br/><br/><br/><br/>
 
 ## Update `semantic-release.toml`
 
@@ -26,7 +27,7 @@ team_name = "python-team"
 > secrets.AZURE_CLINET_ID_CONTAINER_REGISTRY
 > secrets.AZURE_CLIENT_SECRET_CONTAINER_REGISTR
 
-
+<br/><br/>
 
 ```toml
 [tool.gitops]
@@ -46,6 +47,8 @@ image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]'
 > secrets.GITOPS_KEY
 > This key needs to be a deploy key with write privileges
 
+<br/><br/>
+
 ```toml
 [tool.json]
 enabled = false
@@ -57,11 +60,15 @@ package_lock_json_path = 'package-lock.json'
 > Option added so it can use in a javascript projects later.
 > You want to disable this for python projects
 
+<br/><br/>
+
+```toml
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
+```
 > [!NOTE]
 > `[[tool.semantic_release]`
-# If you are not using python, then disable this line, lave the rest
+> If you are not using python, then disable this line, lave the rest
 ```
 
 Sample `pyproject.toml`, if this is set in `[tool.semantic_release]` section, version gets updated
@@ -75,7 +82,7 @@ authors = [{ name = "John Doe", email = "john.doe@whoknows.com" }]
 
 See pull `./github/pull_request_template.md` for info about PR
 
-<br /><br /><br /><br />
+<br /><br />
 
 ## Lock PR to Squash merging
 
