@@ -1,5 +1,5 @@
 > [!NOTE]
-> 1. Read `TEMPLATE.md` and update github settings like it explains.
+> 1. Read [TEMPLATE.md](./TEMPLATE.md) and update github settings like it explains.
 > 2. Update this readme/delete this note.
 > 3. See {info-python-sample](https://github.com/Aibel-Engineering/info-python-sample) for more general info.
 
