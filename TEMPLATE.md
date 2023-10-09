@@ -71,6 +71,8 @@ version_toml = ["pyproject.toml:project.version"]
 > If you are not using python, then disable this line, lave the rest
 ```
 
+<br/><br/>
+
 Sample `pyproject.toml`, if this is set in `[tool.semantic_release]` section, version gets updated
 ```toml
 [project]
@@ -79,6 +81,7 @@ version = "1.0.0"
 authors = [{ name = "John Doe", email = "john.doe@whoknows.com" }]
 ```
 
+<br/><br/>
 
 See pull `./github/pull_request_template.md` for info about PR
 
