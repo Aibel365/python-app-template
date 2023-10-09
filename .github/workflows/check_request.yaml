@@ -8,7 +8,7 @@ on:
 
 jobs:
   lintCheck:
-    name: Python Lint Pull Request
+    name: Python Check Pull Request
     runs-on: ubuntu-latest
     strategy:
       matrix:
