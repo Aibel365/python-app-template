@@ -20,12 +20,13 @@ team_name = "python-team"
 ```
 > [!NOTE]
 > `[tool.docker]`
+> 
 > For building docker image, set to false if not needed
 >
 > This expects to find these under github repo secrets
-> secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY 
-> secrets.AZURE_CLINET_ID_CONTAINER_REGISTRY
-> secrets.AZURE_CLIENT_SECRET_CONTAINER_REGISTR
+> * secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY 
+> * secrets.AZURE_CLINET_ID_CONTAINER_REGISTRY
+> * secrets.AZURE_CLIENT_SECRET_CONTAINER_REGISTR
 
 <br/><br/>
 
@@ -40,11 +41,13 @@ image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]'
 
 > [!NOTE]
 > `[tool.gitops]`
+> 
 > Updating a gitops with new image version based on github action jobid
 > USE ONLY ON TEST!!!
 >
-> This expects to find these under github repo secrets
-> secrets.GITOPS_KEY
+> This expects to find these under github repo secrets:
+> * secrets.GITOPS_KEY
+> 
 > This key needs to be a deploy key with write privileges
 
 <br/><br/>
@@ -58,7 +61,9 @@ package_lock_json_path = 'package-lock.json'
 
 > [!NOTE]
 > `[tool.json]`
+> 
 > Option added so it can use in a javascript projects later.
+> 
 > You want to disable this for python projects
 
 <br/><br/>
@@ -70,6 +75,7 @@ version_toml = ["pyproject.toml:project.version"]
 
 > [!NOTE]
 > `[[tool.semantic_release]`
+> 
 > If you are not using python, then disable this line, lave the rest
 
 
