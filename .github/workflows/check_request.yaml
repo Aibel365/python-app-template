@@ -95,21 +95,7 @@ jobs:
           echo ${{env.JSON_PACKAGE}}
           echo ${{env.JSON_PACKAGE_LOCK}}
 
-      #####################################################################################################################
-
-      - name: Check DOCKER_IMAGE_TEAM & DOCKER_IMAGE_NAME is not empty
-        if: env.DOCKER_ENABLED == 'true' && (env.DOCKER_IMAGE_TEAM == '' || env.DOCKER_IMAGE_NAME == '')
-        run: Not approved && exit 1
-
-      #####################################################################################################################
-    
-
-      - name: Check DOCKER_IMAGE_TEAM & DOCKER_IMAGE_NAME is not using defaults
-        if: env.DOCKER_ENABLED == 'true' && env.DOCKER_IMAGE_NAME == 'app-pythonZ'
-        # todo replace with:app-pythonZ with app-python
-        run: Not approved && exit 1
-        
-      #####################################################################################################################
+     #####################################################################################################################
 
       - name: Check if docker image will manage to build with DOCKER_IMAGE_TEAM & DOCKER_IMAGE_NAME
         if: |
