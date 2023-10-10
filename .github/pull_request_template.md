@@ -18,6 +18,7 @@ Before you are able to merge we will run a few checks like:
 - chore: Some useful that what you have done, refactor/docs, forcing new build etc
 
 ### All PR need release label
+:writing_hand: You need to add below labels first by selecting settings icon & 'Edit labels' option (which you see on the right side when creating a Pull Request) and then select one among those-
 
 Select between:
 - release-auto - for following semver
