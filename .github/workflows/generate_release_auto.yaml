@@ -281,6 +281,7 @@ jobs:
       #####################################################################################################################
 
       - name: Collect semantic release version number
+        working-directory: ./source
         run: |
           echo "VERSION_ENV_CACHE=$(semantic-release --noop version)" >> $GITHUB_ENV
 
