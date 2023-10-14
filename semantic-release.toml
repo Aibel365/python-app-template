@@ -22,9 +22,9 @@ image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]'
 # Updating a gitops with new image version based on github action jobid
 # USE ONLY ON TEST!!!
 #
-# This expects to find these under github repo secrets
-# secrets.GITOPS_KEY
-# This key needs to be a deploy key with write privileges
+# This expects to create a SSH key pair using ed25519. 
+# Keep the public key as a repository secret where you want to push changes(which is gitops repository).
+# Keep the private key as 'secrets.GITOPS_KEY' as a deploy key with write privileges in this repository.
 
 [tool.json]
 enabled = false
