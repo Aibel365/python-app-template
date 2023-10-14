@@ -118,9 +118,9 @@ jobs:
           || contains(github.event.pull_request.labels.*.name, 'release-major'))
         uses: docker/login-action@v3.0.0
         with:
-          registry: ${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}
-          username: ${{ secrets.AZURE_CLINET_ID_CONTAINER_REGISTRY }}
-          password: ${{ secrets.AZURE_CLIENT_SECRET_CONTAINER_REGISTRY }}
+          registry: ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}
+          username: ${{ secrets.CONTAINER_REGISTRY_ACR_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_ACR_PASSWORD }}
 
       #####################################################################################################################
       - name: Check if we can write version to ${{ env.JSON_PACKAGE }} && ${{ env.JSON_PACKAGE_LOCK }}
