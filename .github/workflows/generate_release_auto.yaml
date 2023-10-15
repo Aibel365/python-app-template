@@ -13,6 +13,9 @@ jobs:
       contents: write # needed for semantic release, do not remove
       pull-requests: read # needed for 8BitJonny/gh-get-current-pr
 
+    outputs:
+      release_generated: ${{ steps.release_generated.outputs.release_generated }}
+
     steps:
       #####################################################################################################################
 
@@ -26,6 +29,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ssh-key: ${{ secrets.SOURCE_KEY }}
 
       #####################################################################################################################
 
@@ -94,6 +98,13 @@ jobs:
         run: |
           echo "VERSION_ENV_CACHE=$(semantic-release --noop version --major)" >> $GITHUB_ENV
           echo "RELEASED_GENERATED=1" >> $GITHUB_ENV
+
+      #####################################################################################################################
+
+      - name: Set RELEASED_GENERATED to output (for use in gitops)
+        id: release_generated  
+        run: |
+          echo "release_generated=${{env.RELEASED_GENERATED}}" >> "$GITHUB_OUTPUT"
 
       #####################################################################################################################
 
@@ -228,8 +239,8 @@ jobs:
         if: env.DOCKER_ENABLED == 'true' && env.RELEASED_GENERATED == '1'
         run: |
           docker build \
-            -t ${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest \
-            -t ${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}} .
+            -t ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest \
+            -t ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}} .
 
       #####################################################################################################################
 
@@ -237,9 +248,9 @@ jobs:
         if: env.DOCKER_ENABLED == 'true' && env.RELEASED_GENERATED == '1'
         uses: docker/login-action@v3.0.0
         with:
-          registry: ${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}
-          username: ${{ secrets.AZURE_CLINET_ID_CONTAINER_REGISTRY }}
-          password: ${{ secrets.AZURE_CLIENT_SECRET_CONTAINER_REGISTRY }}
+          registry: ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}
+          username: ${{ secrets.CONTAINER_REGISTRY_ACR_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_ACR_PASSWORD }}
 
       #####################################################################################################################
 
@@ -258,6 +269,7 @@ jobs:
 
       - name: Checkout Source
         uses: actions/checkout@v4
+        if: needs.release.outputs.release_generated == '1'
         with:
           fetch-depth: 0
           path: source
@@ -265,6 +277,7 @@ jobs:
       #####################################################################################################################
 
       - name: Set up Python ${{ matrix.python-version }}
+        if: needs.release.outputs.release_generated == '1'
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
@@ -272,6 +285,7 @@ jobs:
       #####################################################################################################################
 
       - name: Install python dependencies
+        if: needs.release.outputs.release_generated == '1'
         run: |
           python -m pip install --upgrade pip
           pip install toml==0.10.2
@@ -281,6 +295,8 @@ jobs:
       #####################################################################################################################
 
       - name: Collect semantic release version number
+        if: needs.release.outputs.release_generated == '1'
+        working-directory: ./source
         run: |
           echo "VERSION_ENV_CACHE=$(semantic-release --noop version)" >> $GITHUB_ENV
 
@@ -310,8 +326,22 @@ jobs:
 
       #####################################################################################################################
 
+      - name: Echo Config Collected
+        if: needs.release.outputs.release_generated == '1'
+        run: |
+          echo ${{env.DOCKER_ENABLED}}    
+          echo ${{env.DOCKER_IMAGE_TEAM}}
+          echo ${{env.DOCKER_IMAGE_NAME}}
+          echo ${{env.JSON_ENABLED}}    
+          echo ${{env.JSON_PACKAGE}}
+          echo ${{env.JSON_PACKAGE_LOCK}}
+          echo ${{env.VERSION_ENV_CACHE}}  
+          echo ${{needs.release.outputs.release_generated}}
+
+      #####################################################################################################################
+
       - name: Checkout gitops
-        if: env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
+        if: needs.release.outputs.release_generated == '1' && env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
         uses: actions/checkout@v4
         with:
           ref: main
@@ -323,7 +353,7 @@ jobs:
       #####################################################################################################################
 
       - name: Collect gitops config
-        if: env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
+        if: needs.release.outputs.release_generated == '1' && env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
         working-directory: ./gitops
         shell: python
         run: |
@@ -342,11 +372,11 @@ jobs:
 
 
       - name: Gitops - commit yaml
-        if: env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
+        if: needs.release.outputs.release_generated == '1' && env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
         working-directory: ./gitops
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "Test updated ${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}"  
+          git commit --allow-empty -m "Test updated ${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}"  
           git push
