@@ -24,9 +24,9 @@ team_name = "python-team"
 > For building docker image, set to false if not needed
 >
 > This expects to find these under github repo secrets
-> * secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY 
-> * secrets.AZURE_CLINET_ID_CONTAINER_REGISTRY
-> * secrets.AZURE_CLIENT_SECRET_CONTAINER_REGISTR
+> * secrets.CONTAINER_REGISTRY_ACR_URL 
+> * secrets.CONTAINER_REGISTRY_ACR_USERNAME
+> * secrets.CONTAINER_REGISTRY_ACR_PASSWORD
 
 <br/><br/>
 
