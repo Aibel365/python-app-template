@@ -2,7 +2,7 @@
 
 This setup is for strategy when you branch out to with a fix/feat/chore branch, and do PR to main with PR
 
-Atm 4 actions:
+At the moment, below 4 actions are supported by this template:
 - Check pull request (title, release label etc)
 - Run pylint on pullrequest
 - Generate release
@@ -10,7 +10,7 @@ Atm 4 actions:
 
 <br/><br/><br/><br/>
 
-## Update `semantic-release.toml`
+## Update `semantic-release.toml` referring below instructions -
 
 ```toml
 [tool.docker]
@@ -94,6 +94,8 @@ authors = [{ name = "John Doe", email = "john.doe@whoknows.com" }]
 See pull `./github/pull_request_template.md` for info about PR
 
 <br /><br />
+
+Below are the repository settings and branch protection rules which you will need to configure -
 
 ## Lock PR to Squash merging
 

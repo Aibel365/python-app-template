@@ -39,8 +39,7 @@ package_lock_json_path = 'package-lock.json'
 version_toml = ["pyproject.toml:project.version"]
 # info
 #
-# If you are not using python, then disable this line
-#
+# This will generate a release  for your project if added
 # generate_release_auto.yaml expects to find this under github repo secrets
 # secrets.SOURCE_KEY
 # This key needs to be a deploy key with write privileges on this source repository where you plan to do release
