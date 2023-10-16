@@ -97,19 +97,19 @@ See pull `./github/pull_request_template.md` for info about PR
 
 ## Lock PR to Squash merging
 
-![Pull_request_merge](images\PR.png)
+![Pull_request_merge](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/PR.png)
 
 <br /><br /><br /><br />
 
 ## Add branch rule with require PR before merging
 
-![Branch_Protection](images\BP_Rule.png)
+![Branch_Protection](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/BP_Rule.png)
 <br /><br /><br /><br />
 
 ## Require status check to pass before merging
 
 
-![Status_Check](images\status_check.png)
+![Status_Check](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/status_check.png)
 <br /><br /><br /><br />
 
 
