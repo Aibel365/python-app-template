@@ -97,21 +97,19 @@ See pull `./github/pull_request_template.md` for info about PR
 
 ## Lock PR to Squash merging
 
-![image](https://github.com/VegarRingdalAibel/python-action-testing/assets/94840334/2c18d2f4-2e5c-47b9-97f3-43a8daaf41a2)
+![Pull_request_merge](images\PR.png)
 
 <br /><br /><br /><br />
 
 ## Add branch rule with require PR before merging
 
-![image](https://github.com/VegarRingdalAibel/python-action-testing/assets/94840334/79949df3-6a02-4ead-8beb-8b564cbf32c9)
+![Branch_Protection](images\BP_Rule.png)
 <br /><br /><br /><br />
 
 ## Require status check to pass before merging
 
 
-![image](https://github.com/VegarRingdalAibel/python-action-testing/assets/94840334/a77f0348-0af4-4f09-adeb-7b7ebf64d8e2)
+![Status_Check](images\status_check.png)
 <br /><br /><br /><br />
 
-## Dont allow overrides
 
-![image](https://github.com/VegarRingdalAibel/python-action-testing/assets/94840334/b4dfc28a-0c89-410d-bac3-8fe52256b13c)
