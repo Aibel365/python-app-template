@@ -1,0 +1,275 @@
+name: Trigger docker build (patch -next.jobid tag + latest)
+
+## This is a manual action
+## You run this from the github action page
+
+on:
+  workflow_dispatch:
+
+jobs:
+  job1:
+    name: Collect version
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.gettag.outputs.tag }}
+
+    steps:
+      #####################################################################################################################
+
+      - name: Checkout git
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      #####################################################################################################################
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      #####################################################################################################################
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-semantic-release==8.1.1
+          
+      #####################################################################################################################
+
+      - name: Collect semantic release version number
+        run: |
+          echo "VERSION_ENV_CACHE=$(semantic-release --noop version --patch)" >> $GITHUB_ENV
+
+      #####################################################################################################################
+
+      - name: No version found, overriding to 0.0.0
+        if: env.VERSION_ENV_CACHE == ''
+        run: |
+          echo "tag=0.0.0" >> "$GITHUB_OUTPUT"
+
+      - name: Set Semantic version to output
+        id: gettag  
+        run: |
+          echo "tag=${{env.VERSION_ENV_CACHE}}" >> "$GITHUB_OUTPUT"
+      #####################################################################################################################
+    
+      - name: Echo VERSION_ENV_CACHE
+        run: |
+          echo ${{env.VERSION_ENV_CACHE}}    
+
+  #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  job2:
+    name: Build image
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:  
+      #####################################################################################################################
+
+      - name: Checkout git
+        uses: actions/checkout@v4
+        with:
+          ref: ${{github.ref_name}}
+          fetch-depth: 0
+
+      #####################################################################################################################
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      #####################################################################################################################
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install toml==0.10.2
+          pip install tomlkit==0.12.1
+
+      #####################################################################################################################
+
+      - name: Collect docker image team and name
+        shell: python
+        run: |
+          import toml
+          import os
+          data = toml.load("semantic-release.toml")
+          def set_output(name, value):
+            with open(os.environ['GITHUB_ENV'], 'a') as fh:
+                print(f'{name}={value}', file=fh)
+          set_output("DOCKER_ENABLED", data["tool"]["docker"]["enabled"])
+          set_output("DOCKER_IMAGE_TEAM", data["tool"]["docker"]["team_name"])
+          set_output("DOCKER_IMAGE_NAME", data["tool"]["docker"]["image_name"])
+          set_output("JSON_ENABLED", data["tool"]["json"]["enabled"])
+          set_output("JSON_PACKAGE", data["tool"]["json"]["package_json_path"])
+          set_output("JSON_PACKAGE_LOCK", data["tool"]["json"]["package_lock_json_path"])
+
+      #####################################################################################################################
+
+      - name: Check DOCKER_enabled
+        if: env.DOCKER_ENABLED != 'true'
+        run: Not approved && exit 1
+
+      #####################################################################################################################
+
+      - name: Echo Misc variables
+        run: |
+          echo ${{env.DOCKER_ENABLED}}    
+          echo ${{env.DOCKER_IMAGE_TEAM}}
+          echo ${{env.DOCKER_IMAGE_NAME}}
+          echo ${{needs.job1.outputs.tag}}
+          echo ${{env.JSON_ENABLED}}    
+          echo ${{env.JSON_PACKAGE}}
+          echo ${{env.JSON_PACKAGE_LOCK}}
+
+      #####################################################################################################################
+      ## to stay compatible with my exsiting code
+      ## TODO, we might need to give python somethign similar?
+
+      - name: Write version to ${{ env.JSON_PACKAGE }} && ${{ env.JSON_PACKAGE_LOCK }}
+        if: env.JSON_ENABLED == 'true'
+        shell: python
+        run: |
+          import json
+          import os
+          f = open("${{ env.JSON_PACKAGE }}", "r") 
+          data = json.load(f)
+          data["version"] = "${{needs.job1.outputs.tag}}-next.${{github.run_id}}"
+          dump = json.dumps(data, indent = 4)
+          with open("${{ env.JSON_PACKAGE }}", "w") as outfile:
+              outfile.write(dump)
+          f = open("${{ env.JSON_PACKAGE_LOCK }}", "r") 
+          data = json.load(f)
+          data["version"] = "${{needs.job1.outputs.tag}}-next.${{github.run_id}}"
+          dump = json.dumps(data, indent = 4)
+          with open("${{ env.JSON_PACKAGE_LOCK }}", "w") as outfile:
+              outfile.write(dump)
+
+      #####################################################################################################################
+
+      ## so we can show that current version if app if we want
+
+      - name: Write version to pyproject.toml if file exists
+        shell: python
+        run: |
+          from tomlkit import toml_file
+          import os
+
+          if os.path.isfile('pyproject.toml'):
+            file = toml_file.TOMLFile('pyproject.toml')
+            data = file.read()
+            data['project']['version'] = "${{needs.job1.outputs.tag}}-next.${{github.run_id}}"
+            file.write(data)
+
+       #####################################################################################################################     
+
+      - name: Build docker image with DOCKER_IMAGE_TEAM & DOCKER_IMAGE_NAME
+        run: |
+          docker build \
+            -t ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest \
+            -t ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{needs.job1.outputs.tag}}-next.${{github.run_id}} .
+      #####################################################################################################################
+
+      - name: Source - login to ACR
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}
+          username: ${{ secrets.CONTAINER_REGISTRY_ACR_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_ACR_PASSWORD }}
+
+      #####################################################################################################################
+
+      - name: Push docker image (latest tag only)
+        run: |
+          docker push ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest
+          docker push ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{needs.job1.outputs.tag}}-next.${{github.run_id}}
+  #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  job3:
+    name: Update gitops
+    needs: [job1, job2]
+    runs-on: ubuntu-latest
+    steps:
+      #####################################################################################################################
+
+      - name: Checkout Source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{github.ref_name}}
+          fetch-depth: 0
+          path: source
+
+      #####################################################################################################################
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      #####################################################################################################################
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install toml==0.10.2
+          pip install ruamel.yaml==0.17.35
+      #####################################################################################################################
+
+      - name: Collect gitops config
+        working-directory: ./source
+        shell: python
+        run: |
+          import toml
+          import os
+          data = toml.load("semantic-release.toml")
+          def set_output(name, value):
+            with open(os.environ['GITHUB_ENV'], 'a') as fh:
+                print(f'{name}={value}', file=fh)
+          set_output("DOCKER_IMAGE_TEAM", data["tool"]["docker"]["team_name"])
+          set_output("DOCKER_IMAGE_NAME", data["tool"]["docker"]["image_name"])
+          set_output("GITOPS_ENABLED", data["tool"]["gitops"]["enabled"])
+          set_output("GITOPS_REPO", data["tool"]["gitops"]["repo"])
+          set_output("GITOPS_FILE", data["tool"]["gitops"]["file"])
+          set_output("GITOPS_KIND", data["tool"]["gitops"]["kind"])
+          set_output("GITOPS_IMAGE_PATH", data["tool"]["gitops"]["image_path"])
+      #####################################################################################################################
+
+      - name: Checkout gitops
+        if: env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          repository: "${{ env.GITOPS_REPO }}"
+          ssh-key: ${{ secrets.GITOPS_KEY }}
+          path: gitops
+
+      #####################################################################################################################
+
+      - name: Collect gitops config
+        if: env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
+        working-directory: ./gitops
+        shell: python
+        run: |
+          import ruamel.yaml
+          yaml = ruamel.yaml.YAML()
+          with open('${{ env.GITOPS_FILE }}', 'r') as file:
+              code = list(yaml.load_all(file))
+              
+              for a in code:
+                  if a["kind"] == "${{ env.GITOPS_KIND }}":
+                      a${{ env.GITOPS_IMAGE_PATH }} = "${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{needs.job1.outputs.tag}}-next.${{github.run_id}}"  
+                      with open('${{ env.GITOPS_FILE }}', 'w') as file:
+                          yaml.dump_all(code, file)
+      - name: Gitops - commit yaml
+        if: env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
+        working-directory: ./gitops
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Test updated ${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{needs.job1.outputs.tag}}-next.${{github.run_id}}"
+          git push
