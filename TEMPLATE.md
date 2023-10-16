@@ -79,7 +79,8 @@ version_toml = ["pyproject.toml:project.version"]
 > If you are not using python, then disable this line, leave the rest
 >
 > generate_release_auto.yaml expects to find this under github repo secrets
- secrets.SOURCE_KEY
+>
+> secrets.SOURCE_KEY
 >
 > This key needs to be a deploy key with write privileges on this source repository where you plan to do release
 >
