@@ -257,8 +257,8 @@ jobs:
       - name: Push docker image (latest tag and and new release)
         if: env.DOCKER_ENABLED == 'true' && env.RELEASED_GENERATED == '1'
         run: |
-          docker push ${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest
-          docker push ${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}
+          docker push ${{ secrets.CONTAINER_REGISTRY_ACR_URL  }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest
+          docker push ${{ secrets.CONTAINER_REGISTRY_ACR_URL  }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}
 
   gitops:
     needs: release
@@ -295,10 +295,7 @@ jobs:
       #####################################################################################################################
 
       - name: Collect semantic release version number
-<<<<<<< HEAD
         if: needs.release.outputs.release_generated == '1'
-=======
->>>>>>> a459174e2a29c016775e71f2babf1c511af874ea
         working-directory: ./source
         run: |
           echo "VERSION_ENV_CACHE=$(semantic-release --noop version)" >> $GITHUB_ENV
@@ -307,6 +304,7 @@ jobs:
 
       - name: Collect gitops config
         working-directory: ./source
+        if: needs.release.outputs.release_generated == '1'
         shell: python
         run: |
           import toml
@@ -381,10 +379,5 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-<<<<<<< HEAD
           git commit --allow-empty -m "Test updated ${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}"  
           git push
-=======
-          git commit -m "Test updated ${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}"  
-          git push
->>>>>>> a459174e2a29c016775e71f2babf1c511af874ea
