@@ -76,8 +76,14 @@ version_toml = ["pyproject.toml:project.version"]
 > [!NOTE]
 > `[[tool.semantic_release]`
 > 
-> If you are not using python, then disable this line, lave the rest
-
+> If you are not using python, then disable this line, leave the rest
+>
+> generate_release_auto.yaml expects to find this under github repo secrets
+ secrets.SOURCE_KEY
+>
+> This key needs to be a deploy key with write privileges on this source repository where you plan to do release
+>
+> PS! do not enable Do not allow bypassing the above settings under branch protection, if you do we can not push
 
 <br/><br/>
 

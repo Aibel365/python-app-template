@@ -1,5 +1,5 @@
 > [!NOTE]
-> 1. Read [TEMPLATE.md](https://github.com/Aibel365/python-app-template/blob/0688f6ab7df0519245cbef3053c1db3366997a11/TEMPLATE.md) and update github settings like it explains.
+> 1. Read [TEMPLATE.md](https://github.com/Aibel365/python-app-template/blob/main/TEMPLATE.md) and update github settings like it explains.
 > 2. Update this readme/delete this note.
 > 3. See {info-python-sample](https://github.com/Aibel-Engineering/info-python-sample) for more general info.
 > 4. To use this template, select 'Use this template' option and create a new repository from it.
