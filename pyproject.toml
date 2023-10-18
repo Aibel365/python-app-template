@@ -5,7 +5,8 @@ authors = [{ name = "John Doe", email = "john.doe@whoknows.com" }]
 
 
 
-
+[tool.black]
+line-length = 120
 
 
 [tool.pylint.main]
