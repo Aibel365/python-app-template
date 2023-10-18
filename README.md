@@ -26,7 +26,10 @@ ENV_VARIABLE_03="hello3"
 
 # How to lint/format
 * `pip install pylint ruff black isort`
-* `isort ./src && black ./src --config pyproject.toml && ruff ./src --fix && pylint ./src/**/*.py`
+* `isort .`
+* `black ./src --config pyproject.toml`
+* `ruff ./src --fix`
+* `pylint ./src/**/*.py`
 
 ## Contact person
 * John Doe john.doe@whoknown.com
