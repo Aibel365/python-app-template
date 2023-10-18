@@ -1,4 +1,5 @@
 """This module does blah blah."""
+
 import os
 from dotenv import load_dotenv
 
@@ -16,4 +17,3 @@ def print_vars(file: str):
     print(f"ENV_VARIABLE_01:{ENV_VARIABLE_01}")
     print(f"ENV_VARIABLE_01:{ENV_VARIABLE_02}")
     print(f"ENV_VARIABLE_01:{ENV_VARIABLE_03}")
-    
