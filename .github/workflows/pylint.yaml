@@ -43,6 +43,10 @@ jobs:
 
      #####################################################################################################################
 
-      - name: Analysing the code with pylint
+      - name: Analysing the code with pylint/isort/ruff and black
         run: |
           pylint $(git ls-files '*.py')
+          isort . --check
+          black ./src --config pyproject.toml --check
+          ruff ./src --no-fix
+
