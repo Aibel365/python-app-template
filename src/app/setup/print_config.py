@@ -1,5 +1,5 @@
 """This module does blah blah."""
-from app import print_vars
+from app.common.print_vars import print_vars
 
 
 # print using a common module
