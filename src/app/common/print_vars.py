@@ -1,6 +1,7 @@
 """This module does blah blah."""
 
 import os
+
 from dotenv import load_dotenv
 
 # Collect env from our .env file

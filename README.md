@@ -23,6 +23,11 @@ ENV_VARIABLE_03="hello3"
 ```
 * Start application: `python ./src/main.py`
 
+
+# How to lint/format
+* `pip install pylint ruff black isort`
+* `isort ./src && black ./src --config pyproject.toml && ruff ./src --fix && pylint ./src/**/*.py`
+
 ## Contact person
 * John Doe john.doe@whoknown.com
 * Jane Doe jane.doe@whoknown.com

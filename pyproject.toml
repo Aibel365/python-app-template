@@ -4,10 +4,14 @@ version = "0.0.0"
 authors = [{ name = "John Doe", email = "john.doe@whoknows.com" }]
 
 
+[tool.ruff]
+line-length = 120
 
 [tool.black]
 line-length = 120
 
+[tool.isort]
+profile = "black"
 
 [tool.pylint.main]
 # Analyse import fallback blocks. This can be used to support both Python 2 and 3
