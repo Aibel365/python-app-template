@@ -1,5 +1,5 @@
 [tool.docker]
-enabled = true
+enabled = false
 image_name = "app-python"
 team_name = "python-team"
 # INFO:
@@ -12,7 +12,7 @@ team_name = "python-team"
 # secrets.CONTAINER_REGISTRY_ACR_PASSWORD
 
 [tool.gitops]
-enabled = true
+enabled = false
 repo = "Aibel365/sample-python-app-test"
 file = "cluster_test/test.yaml"
 kind = "Deployment"
