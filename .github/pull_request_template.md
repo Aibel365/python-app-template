@@ -3,7 +3,7 @@
 Template you are using is created to protect you doing anything wrong.
 
 Before you are able to merge we will run a few checks like:
-* check for pyton lint errors using pylint
+* check for python lint errors using pylint
 * check if your project is configured correctly to push to our Azure Container Registry
 * check if your docker build is able to build without failing
 * check if you are using conventional commits this project is configured for
