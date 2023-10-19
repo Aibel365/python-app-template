@@ -23,6 +23,27 @@ ENV_VARIABLE_03="hello3"
 ```
 * Start application: `python ./src/main.py`
 
+
+## How to freeze dep
+
+If you add new dependencies remember to update requirements.txt
+
+Option 1:(will add all in virtual env)
+- `pip freeze > requirements.txt`
+
+Option 2: (only whats needed, make sure you test...)
+- `pip install pipreqs`
+- `pipreqs ./ --force`
+
+
+
+# How to lint/format
+* `pip install pylint ruff black isort`
+* `isort .`
+* `black ./src --config pyproject.toml`
+* `ruff ./src --fix`
+* `pylint ./src/**/*.py`
+
 ## Contact person
 * John Doe john.doe@whoknown.com
 * Jane Doe jane.doe@whoknown.com

@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "ms-python.black-formatter",
+    "kevinrose.vsc-python-indent",
+    "ms-azuretools.vscode-docker",
+    "eamodio.gitlens",
+    "ms-vscode-remote.remote-containers",
+    "ms-python.vscode-pylance",
+    "ms-python.pylint",
+    "donjayamanne.python-environment-manager"
+  ]
+}
