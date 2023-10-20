@@ -60,10 +60,6 @@ This project also forces `Squash merge`, so all your commits in a branch will on
 
 All pull request will need to start with fix/feat/chore, and you need to label it with a release label. We also run pylint and a few other checks on you code.
 
-This repo uses [Aibel python app template found here (WIP👷)](https://github.com/Aibel365/python-app-template) 
-
-If you need to know more about how to create docker image/tools, [then look here](https://github.com/Aibel-Engineering/info-python-sample)
-
 <br/><br/><br/>
 
 ## 👶First time using this project (local git clone)
