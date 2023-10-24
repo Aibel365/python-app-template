@@ -94,8 +94,8 @@ jobs:
           echo ${{env.JSON_ENABLED}}    
           echo ${{env.JSON_PACKAGE}}
           echo ${{env.JSON_PACKAGE_LOCK}}
-
-     #####################################################################################################################
+       
+      #####################################################################################################################
 
       - name: Check if docker image will manage to build with DOCKER_IMAGE_TEAM & DOCKER_IMAGE_NAME
         if: |
@@ -105,7 +105,7 @@ jobs:
           || contains(github.event.pull_request.labels.*.name, 'release-minor') 
           || contains(github.event.pull_request.labels.*.name, 'release-major'))
         run: |
-          docker build -t ${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest .
+          docker build -t ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest .
 
       #####################################################################################################################
 
@@ -147,7 +147,7 @@ jobs:
           with open("${{ env.JSON_PACKAGE_LOCK }}", "w") as outfile:
               outfile.write(dump)
 
-gitopsCheck:
+  gitopsCheck:
     needs: lintCheck
     runs-on: ubuntu-latest
 
