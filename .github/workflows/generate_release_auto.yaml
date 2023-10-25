@@ -15,6 +15,7 @@ jobs:
 
     outputs:
       release_generated: ${{ steps.release_generated.outputs.release_generated }}
+      tag: ${{ steps.gettag.outputs.tag }}
 
     steps:
       #####################################################################################################################
@@ -102,7 +103,7 @@ jobs:
       #####################################################################################################################
 
       - name: Set RELEASED_GENERATED to output (for use in gitops)
-        id: release_generated  
+        id: release_generated
         run: |
           echo "release_generated=${{env.RELEASED_GENERATED}}" >> "$GITHUB_OUTPUT"
 
@@ -140,6 +141,7 @@ jobs:
           echo ${{env.JSON_ENABLED}}    
           echo ${{env.JSON_PACKAGE}}
           echo ${{env.JSON_PACKAGE_LOCK}}
+          echo ${{env.VERSION_ENV_CACHE}}
 
       #####################################################################################################################
 
@@ -260,6 +262,13 @@ jobs:
           docker push ${{ secrets.CONTAINER_REGISTRY_ACR_URL  }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:latest
           docker push ${{ secrets.CONTAINER_REGISTRY_ACR_URL  }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}
 
+      #####################################################################################################################
+      - name: Set Semantic version to output, so we can use it in gitops
+        id: gettag
+        run: |
+          echo "tag=${{env.VERSION_ENV_CACHE}}" >> "$GITHUB_OUTPUT"
+
+      #####################################################################################################################
   gitops:
     needs: release
     runs-on: ubuntu-latest
@@ -290,15 +299,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install toml==0.10.2
           pip install ruamel.yaml==0.17.35
-          pip install python-semantic-release==8.1.1
-
-      #####################################################################################################################
-
-      - name: Collect semantic release version number
-        if: needs.release.outputs.release_generated == '1'
-        working-directory: ./source
-        run: |
-          echo "VERSION_ENV_CACHE=$(semantic-release --noop version)" >> $GITHUB_ENV
 
       #####################################################################################################################
 
@@ -336,8 +336,8 @@ jobs:
           echo ${{env.JSON_ENABLED}}    
           echo ${{env.JSON_PACKAGE}}
           echo ${{env.JSON_PACKAGE_LOCK}}
-          echo ${{env.VERSION_ENV_CACHE}}  
           echo ${{needs.release.outputs.release_generated}}
+          echo ${{needs.release.outputs.tag}}
 
       #####################################################################################################################
 
@@ -367,10 +367,9 @@ jobs:
               
               for a in code:
                   if a["kind"] == "${{ env.GITOPS_KIND }}":
-                      a${{ env.GITOPS_IMAGE_PATH }} = "${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}"  
+                      a${{ env.GITOPS_IMAGE_PATH }} = "${{ secrets.AZURE_SERVER_URLS_CONTAINER_REGISTRY }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{needs.release.outputs.tag}}"  
                       with open('${{ env.GITOPS_FILE }}', 'w') as file:
                           yaml.dump_all(code, file)
-
 
       - name: Gitops - commit yaml
         if: needs.release.outputs.release_generated == '1' && env.GITOPS_ENABLED == 'true' && env.GITOPS_REPO != '' && env.GITOPS_FILE != '' && env.GITOPS_KIND != '' && env.GITOPS_IMAGE_PATH != ''
@@ -379,5 +378,5 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit --allow-empty -m "Test updated ${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}"  
+          git commit --allow-empty -m "Test updated ${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{needs.release.outputs.tag}}"  
           git push
