@@ -106,19 +106,19 @@ Below are the repository settings and branch protection rules which you will nee
 
 ## Lock PR to Squash merging
 
-![Pull_request_merge](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/PR.png)
+![Pull_request_merge](./images/PR.png)
 
 <br /><br /><br /><br />
 
 ## Add branch rule with require PR before merging
 
-![Branch_Protection](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/BP_Rule.png)
+![Branch_Protection](./images/BP_Rule.png)
 <br /><br /><br /><br />
 
 ## Require status check to pass before merging
 
 
-![Status_Check](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/status_check.png)
+![Status_Check](./images/status_check.png)
 <br /><br /><br /><br />
 
 
