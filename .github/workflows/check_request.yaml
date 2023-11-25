@@ -30,6 +30,7 @@ jobs:
       - name: Add Triage Label to PR (only if not already added)
         if: >-
           !contains(github.event.pull_request.labels.*.name, 'Triage')
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
