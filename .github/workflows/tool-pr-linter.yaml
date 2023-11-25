@@ -1,0 +1,91 @@
+# A tool to ensure that the pull requests is correctly formatted for changelog and semantic release
+name: tool-pr-checker
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version'
+        type: string
+        required: false
+        default: '3.11'
+    outputs:
+      has_source_key_secret:
+        description: "Is SOURCE_KEY secret set"
+        value: ${{ jobs.lintCheck.outputs.has_source_key_secret }}
+      check-pr-title:
+        description: "Is PR title correct"
+        value: ${{ jobs.lintCheck.outputs.check-pr-title }}
+      check-release-label:
+        description: "Is release label set"
+        value: ${{ jobs.lintCheck.outputs.check-release-label }}
+    secrets:
+      SOURCE_KEY:
+        required: false
+
+jobs:
+  lintCheck:
+    name: Python Check Pull Request
+    runs-on: ubuntu-latest
+    outputs:
+      has_source_key_secret: ${{ steps.check-source-key.outputs.has_source_key_secret }}
+      check-pr-title: ${{ steps.check-pr-title.outputs.check-pr-title }}
+      check-release-label: ${{ steps.check-release-label.outputs.check-release-label }}
+    steps:
+      #####################################################################################################################
+
+      - name: Set up Python ${{ inputs.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      #####################################################################################################################
+
+      - name: Checkout git
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      #####################################################################################################################
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install toml==0.10.2
+
+      #####################################################################################################################
+      - name: check if SOURCE_KEY is set as a secret
+        id: check-source-key
+        run: |
+          if [ -z "${{ secrets.SOURCE_KEY }}" ]; then
+            echo "SOURCE_KEY is not set as a secret"
+            echo "has_source_key_secret=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_source_key_secret=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if pull request title is missing fix/feat/chore
+        id: check-pr-title
+        if: >-
+          !contains(github.event.pull_request.title, 'fix: ') &&
+          !contains(github.event.pull_request.title, 'fix!: ') &&
+          !contains(github.event.pull_request.title, 'feat: ') &&
+          !contains(github.event.pull_request.title, 'feat!: ') &&
+          !contains(github.event.pull_request.title, 'chore: ')
+        run: |
+          echo "You need to start PR title with fix: /feat: /fix!: /feat!: /chore: "
+          echo "check-pr-title=false" >> $GITHUB_OUTPUT
+
+      #####################################################################################################################
+
+      - name: Check if release label is missing
+        id: check-release-label
+        if: >-
+          !contains(github.event.pull_request.labels.*.name, 'release-auto') &&
+          !contains(github.event.pull_request.labels.*.name, 'release-patch') &&
+          !contains(github.event.pull_request.labels.*.name, 'release-minor') &&
+          !contains(github.event.pull_request.labels.*.name, 'release-major') &&
+          !contains(github.event.pull_request.labels.*.name, 'release-skip')
+        run: |
+          echo "You need to set a release tag, release-xyz  (auto, patch, minor, major or skip)"
+          echo "check-release-label=false" >> $GITHUB_OUTPUT

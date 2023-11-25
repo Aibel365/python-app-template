@@ -2,65 +2,121 @@ name: Lint/Check Pull Request
 
 on:
   pull_request:
-    types: [opened, synchronize, edited, labeled]
+    types: [ opened, synchronize, edited, labeled ]
     branches:
       - main
 
+permissions:
+  pull-requests: write
+
+# Use concurrency to ensure that only one instance of this workflow is running at a time
+concurrency:
+  group: pr-lint-checker-${{ github.sha }}
+  cancel-in-progress: true
+
 jobs:
-  lintCheck:
+  pr-lint-checker:
+    uses: ./.github/workflows/tool-pr-linter.yaml
+    with:
+      python-version: 3.11
+    secrets:
+      SOURCE_KEY: ${{ secrets.SOURCE_KEY }}
+
+  pr-lint-review:
     name: Python Check Pull Request
+    needs: pr-lint-checker
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
-
     steps:
-      #####################################################################################################################
+      - name: Add Triage Label to PR (only if not already added)
+        if: >-
+          !contains(github.event.pull_request.labels.*.name, 'Triage')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Triage']
+            })
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: ${{ matrix.python-version }}
-
-      #####################################################################################################################
-
-      - name: Checkout git
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      #####################################################################################################################
+          python-version: 3.11
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install toml==0.10.2
 
-      #####################################################################################################################
+      - name: Checkout git
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      - name: Throw if pull request title is missing fix/feat/chore
-        if: |
-          !contains(github.event.pull_request.title, 'fix: ') 
-          && !contains(github.event.pull_request.title, 'fix!: ') 
-          && !contains(github.event.pull_request.title, 'feat: ') 
-          && !contains(github.event.pull_request.title, 'feat!: ') 
-          && !contains(github.event.pull_request.title, 'chore: ')
+      - name: Review linting results and create body for comment
+        id: comment_body  # Set an ID for this step to reference its outputs
+        shell: python
         run: |
-          echo "You need to start PR title with fix: /feat: /fix!: /feat!: /chore: "
-          Not approved && exit 1
+          import os
+          import base64
+          
+          def set_output(name, value, encode_it=False):
+            if encode_it:
+              value = base64.b64encode(value.encode('utf-8')).decode('utf-8')
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+                print(f'{name}={value}', file=fh)
+          
+          has_source_key_str = '${{ needs.pr-lint-checker.outputs.has_source_key_secret }}'
+          check_pr_title_str = '${{ needs.pr-lint-checker.outputs.check-pr-title }}'
+          check_release_label_str = '${{ needs.pr-lint-checker.outputs.check-release-label }}'
+          
+          print(f"{has_source_key_str=} {check_pr_title_str=} {check_release_label_str=}")
+          
+          # Convert the string values to booleans
+          has_source_key = has_source_key_str.lower() != 'false'
+          check_pr_title = check_pr_title_str.lower() != 'false'
+          check_release_label = check_release_label_str.lower() != 'false'
+          
+          # Construct the body string
+          if [has_source_key, check_pr_title, check_release_label] == [True, True, True]:
+            body = "👋 Hi there! I have checked your PR and found no issues. Thanks for your contribution!"
+            set_output('LINT_OK', 'true')
+          else:
+            body = "👋 Hi there! I have checked your PR and found the following issues:\n\n"
+            set_output('LINT_OK', 'false')
+          
+          if check_pr_title is False:
+            body += "\n * You need to start PR title with fix: feat: fix!: feat!: chore:"
+          
+          if check_release_label is False:
+            body += "\n * You need to add a release label to your PR. Valid labels: release-XXX (auto, patch, minor, major or skip)"
+          
+          if has_source_key is False:
+            body += "\n * You need to add SOURCE_KEY as a secret to your repo if you want semantic-release to work"
+          
+          # Set the output
+          set_output('body', body, True)
+          
+          print(os.environ['GITHUB_OUTPUT'])
 
-      #####################################################################################################################
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const bodyBase64 = '${{ steps.comment_body.outputs.body }}'
+            const body = Buffer.from(bodyBase64, 'base64').toString('utf-8')
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            })
 
-      - name: Throw is release label is missing
-        if: |
-          !contains(github.event.pull_request.labels.*.name, 'release-auto') 
-          && !contains(github.event.pull_request.labels.*.name, 'release-patch') 
-          && !contains(github.event.pull_request.labels.*.name, 'release-minor') 
-          && !contains(github.event.pull_request.labels.*.name, 'release-major')
-          && !contains(github.event.pull_request.labels.*.name, 'release-skip')
-        run: |
-          echo "You need to set a release tag, release-xyz  (auto, patch, minor, major or skip)"
-          Not approved && exit 1
+      - name: Fail if linting failed
+        if: steps.comment_body.outputs.LINT_OK == 'false'
+        run: exit 1
 
       #####################################################################################################################
 
@@ -94,7 +150,7 @@ jobs:
           echo ${{env.JSON_ENABLED}}    
           echo ${{env.JSON_PACKAGE}}
           echo ${{env.JSON_PACKAGE_LOCK}}
-       
+
       #####################################################################################################################
 
       - name: Check if docker image will manage to build with DOCKER_IMAGE_TEAM & DOCKER_IMAGE_NAME
@@ -148,7 +204,7 @@ jobs:
               outfile.write(dump)
 
   gitopsCheck:
-    needs: lintCheck
+    needs: pr-lint-review
     runs-on: ubuntu-latest
 
     steps:
@@ -251,7 +307,7 @@ jobs:
 
           with open('${{ env.GITOPS_FILE }}', 'r') as file:
               code = list(yaml.load_all(file))
-              
+          
               for a in code:
                   if a["kind"] == "${{ env.GITOPS_KIND }}":
                       a${{ env.GITOPS_IMAGE_PATH }} = "${{ secrets.CONTAINER_REGISTRY_ACR_URL }}/${{env.DOCKER_IMAGE_TEAM}}/${{env.DOCKER_IMAGE_NAME}}:${{env.VERSION_ENV_CACHE}}"  
