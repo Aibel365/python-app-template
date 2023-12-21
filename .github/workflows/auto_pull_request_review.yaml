@@ -1,0 +1,36 @@
+name: AUTO 🤖 Pull Request Review
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, edited, unlabeled]
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+  contents: write
+
+# Use concurrency to ensure that only one instance of this workflow is running at a time
+concurrency:
+  group: pr-lint-checker-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Reviews pull request
+    uses: AibelDevs/action-toolbox/.github/workflows/default-tool-pr-review.yaml@main
+    secrets:
+      SOURCE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SOURCE }}
+      CONTAINER_REGISTRY_URL: ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}
+      CONTAINER_REGISTRY_USERNAME: ${{ secrets.CONTAINER_REGISTRY_ACR_USERNAME }}
+      CONTAINER_REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_ACR_PASSWORD }}
+      GITOPS_KEY: ${{ secrets.SSH_PRIVATE_KEY_GITOPS }}
+  pr_review_done:
+    name: Add me as branch protection job to run
+    if: always()
+    needs: [review]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking done
+        if: needs.review.outputs.review_ok != 'true'
+        run: exit 1

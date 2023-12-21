@@ -1,0 +1,39 @@
+name: MANUAL 😬 Dispatch New Release Without Pull Request - (Use only MAIN branch)
+
+on:
+  workflow_dispatch:
+    inputs:
+      verification:
+        description: 'Write "yes" to confirm'
+        required: true
+        type: string
+      release_level:
+        description: "Release level"
+        required: false
+        type: choice
+        default: "auto"
+        options:
+          - "auto"
+          - "patch"
+          - "minor"
+          - "major"
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: release-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  release_if_ok:
+    if: github.event.inputs.verification == 'yes' && github.ref_name == github.event.repository.default_branch
+    uses: AibelDevs/action-toolbox/.github/workflows/tool-generate-semantic-version.yaml@main
+    with:
+      config_toml_file: "action_config.toml"
+      release_override: ${{ (github.event.inputs.release_level != 'auto' && format('--{0}', github.event.inputs.release_level)) || '' }}
+
+    secrets:
+      SOURCE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SOURCE }}

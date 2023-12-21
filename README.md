@@ -22,7 +22,7 @@ Write something useful about the app/script you are making, what it does/solves.
 
 * See [gitops repo](https://github.com/Aibel365/ue-something-gitops) for link to deployment/vault etc
 * See `pyproject.toml` for contact info/open api tag info
-* See `semantic-release.toml` for gitops/docker config
+* See `action_config.toml` for gitops/docker config
 
 
 <br/><br/><br/>
@@ -130,11 +130,11 @@ ofc, you need to run you application to make sure after..
 ## 🔬 Linting code:
 
 This is how you can run local linting if needed.
-- `pip install pylint ruff black isort`
+- `pip install ruff black isort`
 - `isort .`
 - `black ./src --config pyproject.toml`
 - `ruff ./src --fix`
-- `pylint ./src/**/*.py`
+
 
 You should run this before you do any pull request, and make sure you score 10 of 10
 

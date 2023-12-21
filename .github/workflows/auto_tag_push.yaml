@@ -1,0 +1,20 @@
+name: AUTO 🤖 Tag Push (after release)
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  release:
+    uses: AibelDevs/action-toolbox/.github/workflows/default-tool-release.yaml@main
+    secrets:
+      SOURCE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SOURCE }}
+      CONTAINER_REGISTRY_URL: ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}
+      CONTAINER_REGISTRY_USERNAME: ${{ secrets.CONTAINER_REGISTRY_ACR_USERNAME }}
+      CONTAINER_REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_ACR_PASSWORD }}
+      GITOPS_KEY: ${{ secrets.SSH_PRIVATE_KEY_GITOPS }}

@@ -2,103 +2,32 @@
 
 This setup is for strategy when you branch out to with a fix/feat/chore branch, and do PR to main with PR
 
-At the moment, below 4 actions are supported by this template:
-- Check pull request (title, release label etc)
-- Run pylint on pullrequest
-- Generate release
-- Make test image (manual)
+See `action_config.toml` for docker/gitops config.
 
-<br/><br/><br/><br/>
+When you have updated your `action_config.toml`, start with a PR, this will review all your settings.
 
-## Update `semantic-release.toml` referring below instructions -
+## All PR titles need to start with either
 
-```toml
-[tool.docker]
-enabled = true
-image_name = "app-python"
-team_name = "python-team"
-```
-> [!NOTE]
-> `[tool.docker]`
-> 
-> For building docker image, set to false if not needed
->
-> This expects to find these under github repo secrets
-> * secrets.CONTAINER_REGISTRY_ACR_URL 
-> * secrets.CONTAINER_REGISTRY_ACR_USERNAME
-> * secrets.CONTAINER_REGISTRY_ACR_PASSWORD
+Pull request review will check if you are using one of these.
 
-<br/><br/>
+- fix: Some useful text what you fix
+- fix!: Some useful text why you make a breaking change with your fix
+- feat: Some useful text what your feature add
+- feat!: Some useful text why you make a breaking change with your feature
+- chore: Some useful that what you have done, refactor/docs, forcing new build etc
 
-```toml
-[tool.gitops]
-enabled = true
-repo = "VegarRingdalAibel/simple_action"
-file = "test.yaml"
-kind = "Deployment"
-image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]'
-```
 
-> [!NOTE]
-> `[tool.gitops]`
-> 
-> Updating a gitops with new image version based on github action jobid
-> USE ONLY ON TEST!!!
->
-> This expects to find these under github repo secrets:
-> * secrets.GITOPS_KEY
-> 
-> This key needs to be a deploy key with write privileges
+## All PR need release label
 
-<br/><br/>
+These labels are added if they ar missing, pr is missing label for skipping release will be added by actions
 
-```toml
-[tool.json]
-enabled = false
-package_json_path = 'package.json'
-package_lock_json_path = 'package-lock.json'
-```
+Select between:
 
-> [!NOTE]
-> `[tool.json]`
-> 
-> Option added so it can use in a javascript projects later.
-> 
-> You want to disable this for python projects
-
-<br/><br/>
-
-```toml
-[tool.semantic_release]
-version_toml = ["pyproject.toml:project.version"]
-```
-
-> [!NOTE]
-> `[[tool.semantic_release]`
-> 
-> If you are not using python, then disable this line, leave the rest
->
-> generate_release_auto.yaml expects to find this under github repo secrets
->
-> secrets.SOURCE_KEY
->
-> This key needs to be a deploy key with write privileges on this source repository where you plan to do release
->
-> PS! do not enable Do not allow bypassing the above settings under branch protection, if you do we can not push
-
-<br/><br/>
-
-Sample `pyproject.toml`, if this is set in `[tool.semantic_release]` section, version gets updated
-```toml
-[project]
-name = "app-python"
-version = "1.0.0"
-authors = [{ name = "John Doe", email = "john.doe@whoknows.com" }]
-```
-
-<br/><br/>
-
-See pull `./github/pull_request_template.md` for info about PR
+- release-auto - for following semver
+- release-patch - to force patch 1.0.X
+- release-minor - to force patch 1.X.0
+- release-major - to force patch X.0.0
+- release-skip - to skip release after merge
 
 <br /><br />
 
@@ -117,8 +46,4 @@ Below are the repository settings and branch protection rules which you will nee
 
 ## Require status check to pass before merging
 
-
-![Status_Check](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/status_check.png)
-<br /><br /><br /><br />
-
-
+`TODO add image` - search for "Add me as branch protection" and just use that one.

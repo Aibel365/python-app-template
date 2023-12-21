@@ -1,0 +1,31 @@
+name: AUTO 🤖 Push On Branch (not main) To Generate Pre Release
+
+on:
+  push:
+    branches:
+      - "**"
+      - "!main"
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: prerelease-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  run:
+    if: contains(github.event.head_commit.message, 'GENERATE_TEST')      
+    uses: AibelDevs/action-toolbox/.github/workflows/default-tool-pre-release-dispatch.yaml@main
+    with:
+      release_docker: "true"
+      release_gitops: "true"
+      pre_release_level: "patch"
+    secrets:
+      SOURCE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SOURCE }}
+      CONTAINER_REGISTRY_URL: ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}
+      CONTAINER_REGISTRY_USERNAME: ${{ secrets.CONTAINER_REGISTRY_ACR_USERNAME }}
+      CONTAINER_REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_ACR_PASSWORD }}
+      GITOPS_KEY: ${{ secrets.SSH_PRIVATE_KEY_GITOPS }}

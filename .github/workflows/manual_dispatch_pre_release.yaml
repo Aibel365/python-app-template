@@ -1,0 +1,48 @@
+name: MANUAL 😬 Dispatch "next" release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_docker:
+        description: "Issue Pre-Release to docker"
+        required: false
+        type: boolean
+        default: true
+      release_gitops:
+        description: "Issue Pre-Release to gitops"
+        required: false
+        type: boolean
+        default: true
+      release_level:
+        description: "Pre-release level (rebuild=latest tag)"
+        required: false
+        type: choice
+        default: "patch"
+        options:
+          - "patch"
+          - "minor"
+          - "major"
+          - "rebuild"
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: prerelease-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  run:
+    uses: AibelDevs/action-toolbox/.github/workflows/default-tool-pre-release-dispatch.yaml@main
+    with:
+      release_docker: ${{ github.event.inputs.release_docker }}
+      release_gitops: ${{ github.event.inputs.release_gitops }}
+      pre_release_level: ${{ github.event.inputs.release_level }}
+    secrets:
+      SOURCE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SOURCE }}
+      CONTAINER_REGISTRY_URL: ${{ secrets.CONTAINER_REGISTRY_ACR_URL }}
+      CONTAINER_REGISTRY_USERNAME: ${{ secrets.CONTAINER_REGISTRY_ACR_USERNAME }}
+      CONTAINER_REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_ACR_PASSWORD }}
+      GITOPS_KEY: ${{ secrets.SSH_PRIVATE_KEY_GITOPS }}
