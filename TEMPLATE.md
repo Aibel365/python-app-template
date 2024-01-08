@@ -1,10 +1,10 @@
 # Template Info
 
-This setup is for strategy when you branch out to with a fix/feat/chore branch, and do PR to main with PR
+This setup is for strategy when you branch out with a fix/feat/chore branch, and do merge to main with PR
 
-See `action_config.toml` for docker/gitops config. Update it by following all the instructions given in the file(as a comment).
+See `action_config.toml` for docker/gitops config. Update it by following all the instructions given in the file(mentioned as comments).
 
-Merge all your changes with a PR, this will review all your settings.
+Note: Merge all your changes to main only with a PR, this will review all your settings.
 
 ## All PR titles need to start with either
 
