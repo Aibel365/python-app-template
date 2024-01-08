@@ -81,6 +81,7 @@ Below are the repository settings and branch protection rules which you will nee
 </ul>
 
 
+<br />
 
 ## Manual Worflows
 
