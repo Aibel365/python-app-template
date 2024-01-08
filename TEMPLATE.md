@@ -53,28 +53,27 @@ Below are the repository settings and branch protection rules which you will nee
 
 ## Automatic Workflows
 
-
-- auto_pull_request_review.yaml
-    - Triggers on pull_request_target.
-    - Reviews code based on configuration set in the action_config.toml, and reports back to pull request with status.
-- auto_pull_request_merge.yaml
-    - Triggers on pull_request (if merged).
-    - Generates new release/changelog -> this will again trigger tag push.
-- auto_tag_push.yaml
-    - Triggers on tag push.
-    - Triggers actions to build docker/gitops if enabled in action_config.toml.
-- auto_push_generate_pre_release.yaml
-    - Triggers on push to other branches. (as long as its not main branch).
-    - Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
+* __auto_push_generate_pre_release.yaml__
+    * Triggers on pull_request_target.
+    * Reviews code based on configuration set in the action_config.toml, and reports back to pull request with status.
+* __auto_pull_request_merge.yaml__
+    * Triggers on pull_request (if merged).
+    * Generates new release/changelog -> this will again trigger tag push.
+* __auto_tag_push.yaml__
+    * Triggers on tag push.
+    * Triggers actions to build docker/gitops if enabled in action_config.toml.
+* __auto_push_generate_pre_release.yaml__
+    * Triggers on push to other branches. (as long as its not main branch).
+    * Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
 
 
 <br />
 
 ## Manual Worflows
 
-- manual_dispatch_new_release.yaml
-    - Creates a new semantic release version based on last created.
-- manual_dispatch_pre_release.yaml
-    - Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
+* __manual_dispatch_new_release.yaml__
+    * Creates a new semantic release version based on last created.
+* __manual_dispatch_pre_release.yaml__
+    * Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
 
 
