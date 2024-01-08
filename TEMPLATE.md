@@ -63,6 +63,26 @@ Below are the repository settings and branch protection rules which you will nee
         -> Like other workflows, this will also verifies the configuration in action-config.toml and then take the required action like create, build and push docker image, & updated the new docker image version in  yaml file of respective gitops repository.
 <br />
 
+<ol>**auto_pull_request_review.yaml**</ol>
+
+<li>on pull_request_target</li>
+<li>reviews code based on configuration set in the action_config.toml, and reports back to pull request with status</li>
+
+<ol>**auto_pull_request_merge.yaml**</ol>
+
+<li>on pull_request (if merged)</li>
+<li>generates new release/changelog -> this will again trigger tag push...</li>
+
+<ol>auto_tag_push.yaml</ol>
+
+<li>on tag push</li>
+<li>Triggers action to build docker/gitops if enabled in action_config.toml</li>
+
+<ol>**auto_push_generate_pre_release.yaml**</ol>
+
+<li>on push (as long as its not main branch)</li>
+<li>Triggers build of "next image" and update gitops/docker if enabled in action_config.toml</li>
+
 ## Manual worflows
 
 - **manual_dispatch_new_release.yaml** - Creating a new semantic release version
