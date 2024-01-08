@@ -48,19 +48,19 @@ Below are the repository settings and branch protection rules which you will nee
 
 `TODO add image` - search for "Add me as branch protection" and just use that one.
 
-
+<br />
 ## Automatic workflows triggered on pushing code to different branches
 
-- Create a PR to merge code in main branch
+- **Create a PR to merge code in main branch**
         -> Generates a new semantic version.
         -> As a part of PR review,  PR title, PR label, configuration in action-config.toml is verified. If any of these configuration is missing or wrong then the workflow fails.
         -> Once the PR is merged, the configuration in action-config.toml will be checked specifically for gitops, docker, conda and pypi and then build a docker image,push it to ACR , update the new docker image version in yaml of gitops repository.
-- Merge code to branches other than main
+- **Merge code to branches other than main**
         -> In this case, PR and action-config.toml will be verified and reviewed for any missing or wrong information.
         -> After verification, if everthing is ok then docker image will be created, build and pushed to ACR, gitops repository will be updated with new docker image version.
-- On pushing a new tag
+- **On pushing a new tag**
         -> Like other workflows, this will also verifies the configuration in action-config.toml and then take the required action like create, build and push docker image, & updated the new docker image version in  yaml file of respective gitops repository.
-
+<br />
 ## Manual worflows
 
 - **manual_dispatch_new_release.yaml** - Creating a new semantic release version
