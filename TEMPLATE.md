@@ -52,49 +52,29 @@ Below are the repository settings and branch protection rules which you will nee
 <br />
 
 ## Automatic Workflows
-<ul>
-  <li><b>auto_pull_request_review.yaml</b>
-    <ul>
-      <li>Triggers on pull_request_target.</li>
-      <li>Reviews code based on configuration set in the action_config.toml, and reports back to pull request with status.</li>
-    </ul>
-  </li>
-  <li><b>auto_pull_request_merge.yaml</b>
-    <ul>
-      <li>Triggers on pull_request (if merged).</li>
-      <li>Generates new release/changelog -> this will again trigger tag push.</li>
-    </ul>
-  </li>
-  <li><b>auto_tag_push.yaml</b>
-    <ul>
-      <li>Triggers on tag push.</li>
-      <li>Triggers actions to build docker/gitops if enabled in action_config.toml.</li>
-    </ul>
-  </li>
-  <li><b>auto_push_generate_pre_release.yaml</b>
-    <ul>
-      <li>Triggers on push to other branches. (as long as its not main branch).</li>
-      <li>Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.</li>
-    </ul>
-  </li>
-</ul>
+
+
+- auto_pull_request_review.yaml
+    - Triggers on pull_request_target.
+    - Reviews code based on configuration set in the action_config.toml, and reports back to pull request with status.
+- auto_pull_request_merge.yaml
+    - Triggers on pull_request (if merged).
+    - Generates new release/changelog -> this will again trigger tag push.
+- auto_tag_push.yaml
+    - Triggers on tag push.
+    - Triggers actions to build docker/gitops if enabled in action_config.toml.
+- auto_push_generate_pre_release.yaml
+    - Triggers on push to other branches. (as long as its not main branch).
+    - Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
 
 
 <br />
 
 ## Manual Worflows
 
-<ul>
-  <li><b>manual_dispatch_new_release.yaml</b>
-    <ul>
-      <li>Creates a new semantic release version based on last created.</li>
-    </ul>
-  </li>
-  <li><b>manual_dispatch_pre_release.yaml</b>
-    <ul>
-      <li>Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.</li>
-    </ul>
-  </li>
-</ul>
+- manual_dispatch_new_release.yaml
+    - Creates a new semantic release version based on last created.
+- manual_dispatch_pre_release.yaml
+    - Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
 
 
