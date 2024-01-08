@@ -1,10 +1,10 @@
 # Template Info
 
-This setup is for strategy when you branch out to with a fix/feat/chore branch, and do PR to main with PR
+This setup is for strategy when you branch out with a fix/feat/chore branch, and do merge to main with PR
 
-See `action_config.toml` for docker/gitops config.
+See `action_config.toml` for docker/gitops config. Update it by following all the instructions given in the file(mentioned as comments).
 
-When you have updated your `action_config.toml`, start with a PR, this will review all your settings.
+Note: Merge all your changes to main only with a PR, this will review all your settings.
 
 ## All PR titles need to start with either
 
@@ -19,8 +19,6 @@ Pull request review will check if you are using one of these.
 
 ## All PR need release label
 
-These labels are added if they ar missing, pr is missing label for skipping release will be added by actions
-
 Select between:
 
 - release-auto - for following semver
@@ -28,6 +26,8 @@ Select between:
 - release-minor - to force patch 1.X.0
 - release-major - to force patch X.0.0
 - release-skip - to skip release after merge
+
+Note: If a label is missing in a PR then 'release-skip' label will be added by default to the PR.
 
 <br /><br />
 
@@ -46,4 +46,34 @@ Below are the repository settings and branch protection rules which you will nee
 
 ## Require status check to pass before merging
 
-`TODO add image` - search for "Add me as branch protection" and just use that one.
+![Add_me_as_Branch_Protection_check](https://github.com/Aibel365/python-app-template/assets/121802270/d9ce10d6-cdf5-40ff-b72f-ff6fe86d645b)
+
+
+<br />
+
+## Automatic Workflows
+
+* __auto_push_generate_pre_release.yaml__
+    * Triggers on pull_request_target.
+    * Reviews code based on configuration set in the action_config.toml, and reports back to pull request with status.
+* __auto_pull_request_merge.yaml__
+    * Triggers on pull_request (if merged).
+    * Generates new release/changelog -> this will again trigger tag push.
+* __auto_tag_push.yaml__
+    * Triggers on tag push.
+    * Triggers actions to build docker/gitops if enabled in action_config.toml.
+* __auto_push_generate_pre_release.yaml__
+    * Triggers on push to other branches. (as long as its not main branch).
+    * Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
+
+
+<br />
+
+## Manual Worflows
+
+* __manual_dispatch_new_release.yaml__
+    * Creates a new semantic release version based on last created.
+* __manual_dispatch_pre_release.yaml__
+    * Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
+
+
