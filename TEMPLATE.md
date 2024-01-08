@@ -51,8 +51,7 @@ Below are the repository settings and branch protection rules which you will nee
 
 <br />
 
-## Automatic workflows triggered on pushing code to different branches
-
+## Automatic Workflows
 <ul>
   <li><b>auto_pull_request_review.yaml</b>
     <ul>
