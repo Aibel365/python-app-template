@@ -46,44 +46,34 @@ Below are the repository settings and branch protection rules which you will nee
 
 ## Require status check to pass before merging
 
-`TODO add image` - search for "Add me as branch protection" and just use that one.
+![Add_me_as_Branch_Protection_check](https://github.com/Aibel365/python-app-template/assets/121802270/d9ce10d6-cdf5-40ff-b72f-ff6fe86d645b)
+
 
 <br />
 
 ## Automatic workflows triggered on pushing code to different branches
 
-- **Create a PR to merge code in main branch**
-        -> Generates a new semantic version.
-        -> As a part of PR review,  PR title, PR label, configuration in action-config.toml is verified. If any of these configuration is missing or wrong then the workflow fails.
-        -> Once the PR is merged, the configuration in action-config.toml will be checked specifically for gitops, docker, conda and pypi and then build a docker image,push it to ACR , update the new docker image version in yaml of gitops repository.
-- **Merge code to branches other than main**
-        -> In this case, PR and action-config.toml will be verified and reviewed for any missing or wrong information.
-        -> After verification, if everthing is ok then docker image will be created, build and pushed to ACR, gitops repository will be updated with new docker image version.
-- **On pushing a new tag**
-        -> Like other workflows, this will also verifies the configuration in action-config.toml and then take the required action like create, build and push docker image, & updated the new docker image version in  yaml file of respective gitops repository.
-<br />
+**<ol>1. auto_pull_request_review.yaml</ol>**
 
-<ol>**auto_pull_request_review.yaml**</ol>
+<li>Triggers on pull_request_target.</li>
+<li>Reviews code based on configuration set in the action_config.toml, and reports back to pull request with status.</li>
 
-<li>on pull_request_target</li>
-<li>reviews code based on configuration set in the action_config.toml, and reports back to pull request with status</li>
+**<ol>2. auto_pull_request_merge.yaml</ol>**
 
-<ol>**auto_pull_request_merge.yaml**</ol>
+<li>Triggers on pull_request (if merged).</li>
+<li>Generates new release/changelog -> this will again trigger tag push.</li>
 
-<li>on pull_request (if merged)</li>
-<li>generates new release/changelog -> this will again trigger tag push...</li>
+**<ol>3. auto_tag_push.yaml</ol>**
 
-<ol>auto_tag_push.yaml</ol>
+<li>Triggers on tag push.</li>
+<li>Triggers actions to build docker/gitops if enabled in action_config.toml.</li>
 
-<li>on tag push</li>
-<li>Triggers action to build docker/gitops if enabled in action_config.toml</li>
+**<ol>4. auto_push_generate_pre_release.yaml</ol>**
 
-<ol>**auto_push_generate_pre_release.yaml**</ol>
-
-<li>on push (as long as its not main branch)</li>
-<li>Triggers build of "next image" and update gitops/docker if enabled in action_config.toml</li>
+<li>Triggers on push to other branches. (as long as its not main branch).</li>
+<li>Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.</li>
 
 ## Manual worflows
 
-- **manual_dispatch_new_release.yaml** - Creating a new semantic release version
-- **manual_dispatch_pre_release.yaml** - Dispatch the new semantic release version created by above workflow
+**1. manual_dispatch_new_release.yaml** - Creates a new semantic release version based on last created.
+**2. manual_dispatch_pre_release.yaml** - Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
