@@ -53,27 +53,48 @@ Below are the repository settings and branch protection rules which you will nee
 
 ## Automatic workflows triggered on pushing code to different branches
 
-**<ol>1. auto_pull_request_review.yaml</ol>**
+<ul>
+  <li><b>auto_pull_request_review.yaml</b>
+    <ul>
+      <li>Triggers on pull_request_target.</li>
+      <li>Reviews code based on configuration set in the action_config.toml, and reports back to pull request with status.</li>
+    </ul>
+  </li>
+  <li><b>auto_pull_request_merge.yaml</b>
+    <ul>
+      <li>Triggers on pull_request (if merged).</li>
+      <li>Generates new release/changelog -> this will again trigger tag push.</li>
+    </ul>
+  </li>
+  <li><b>auto_tag_push.yaml</b>
+    <ul>
+      <li>Triggers on tag push.</li>
+      <li>Triggers actions to build docker/gitops if enabled in action_config.toml.</li>
+    </ul>
+  </li>
+  <li><b>auto_push_generate_pre_release.yaml</b>
+    <ul>
+      <li>Triggers on push to other branches. (as long as its not main branch).</li>
+      <li>Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.</li>
+    </ul>
+  </li>
+</ul>
 
-<li>Triggers on pull_request_target.</li>
-<li>Reviews code based on configuration set in the action_config.toml, and reports back to pull request with status.</li>
 
-**<ol>2. auto_pull_request_merge.yaml</ol>**
 
-<li>Triggers on pull_request (if merged).</li>
-<li>Generates new release/changelog -> this will again trigger tag push.</li>
+## Manual Worflows
 
-**<ol>3. auto_tag_push.yaml</ol>**
+<ul>
+  <li><b>manual_dispatch_new_release.yaml</b>
+    <ul>
+      <li>Creates a new semantic release version based on last created.</li>
+    </ul>
+  </li>
+  <li><b>manual_dispatch_pre_release.yaml</b>
+    <ul>
+      <li>Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.</li>
+    </ul>
+  </li>
+</ul>
 
-<li>Triggers on tag push.</li>
-<li>Triggers actions to build docker/gitops if enabled in action_config.toml.</li>
 
-**<ol>4. auto_push_generate_pre_release.yaml</ol>**
-
-<li>Triggers on push to other branches. (as long as its not main branch).</li>
-<li>Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.</li>
-
-## Manual worflows
-
-**1. manual_dispatch_new_release.yaml** - Creates a new semantic release version based on last created.
-**2. manual_dispatch_pre_release.yaml** - Triggers build of "next image" and update gitops/docker if enabled in action_config.toml.
