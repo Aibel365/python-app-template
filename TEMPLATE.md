@@ -49,6 +49,7 @@ Below are the repository settings and branch protection rules which you will nee
 `TODO add image` - search for "Add me as branch protection" and just use that one.
 
 <br />
+
 ## Automatic workflows triggered on pushing code to different branches
 
 - **Create a PR to merge code in main branch**
@@ -61,6 +62,7 @@ Below are the repository settings and branch protection rules which you will nee
 - **On pushing a new tag**
         -> Like other workflows, this will also verifies the configuration in action-config.toml and then take the required action like create, build and push docker image, & updated the new docker image version in  yaml file of respective gitops repository.
 <br />
+
 ## Manual worflows
 
 - **manual_dispatch_new_release.yaml** - Creating a new semantic release version
