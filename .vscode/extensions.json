@@ -6,7 +6,6 @@
     "eamodio.gitlens",
     "ms-vscode-remote.remote-containers",
     "ms-python.vscode-pylance",
-    "ms-python.pylint",
     "donjayamanne.python-environment-manager"
   ]
 }

@@ -131,9 +131,10 @@ ofc, you need to run you application to make sure after..
 
 This is how you can run local linting if needed.
 - `pip install ruff black isort`
+- `ruff ./src --fix`
 - `isort .`
 - `black ./src --config pyproject.toml`
-- `ruff ./src --fix`
+
 
 
 You should run this before you do any pull request, and make sure you score 10 of 10
