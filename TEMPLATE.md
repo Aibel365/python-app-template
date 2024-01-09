@@ -1,4 +1,4 @@
-# Template Info
+# Template Info (setup)
 
 This setup is for strategy when you branch out with a fix/feat/chore branch, and do merge to main with PR
 
@@ -6,7 +6,32 @@ See `action_config.toml` for docker/gitops config. Update it by following all th
 
 Note: Merge all your changes to main only with a PR, this will review all your settings.
 
-## All PR titles need to start with either
+
+<br /><br />
+
+Below are the repository settings and branch protection rules which you will need to configure
+
+## Lock PR to Squash merging (setup)
+
+![Pull_request_merge](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/PR.png)
+
+<br /><br /><br /><br />
+
+## Add branch rule with require PR before merging (setup)
+
+![Branch_Protection](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/BP_Rule.png)
+<br /><br /><br /><br />
+
+## Require status check to pass before merging (setup)
+
+> You will not be able to find this before you have had 1 pr, so make a dummy PR when you have pushed you config to main...
+
+![Add_me_as_Branch_Protection_check](https://github.com/Aibel365/python-app-template/assets/121802270/d9ce10d6-cdf5-40ff-b72f-ff6fe86d645b)
+
+
+<br /><br />
+
+## All PR titles need to start with either (info only)
 
 Pull request review will check if you are using one of these.
 
@@ -17,7 +42,7 @@ Pull request review will check if you are using one of these.
 - chore: Some useful that what you have done, refactor/docs, forcing new build etc
 
 
-## All PR need release label
+## All PR need release label (info only)
 
 Select between:
 
@@ -29,29 +54,11 @@ Select between:
 
 Note: If a label is missing in a PR then 'release-skip' label will be added by default to the PR.
 
-<br /><br />
-
-Below are the repository settings and branch protection rules which you will need to configure -
-
-## Lock PR to Squash merging
-
-![Pull_request_merge](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/PR.png)
-
-<br /><br /><br /><br />
-
-## Add branch rule with require PR before merging
-
-![Branch_Protection](https://github.com/Aibel365/python-app-template/blob/d5a219f73a91d787e242e775880be59e08beee8a/images/BP_Rule.png)
-<br /><br /><br /><br />
-
-## Require status check to pass before merging
-
-![Add_me_as_Branch_Protection_check](https://github.com/Aibel365/python-app-template/assets/121802270/d9ce10d6-cdf5-40ff-b72f-ff6fe86d645b)
 
 
 <br />
 
-## Automatic Workflows
+## Automatic Workflows (info only)
 
 * __auto_push_generate_pre_release.yaml__
     * Triggers on pull_request_target.

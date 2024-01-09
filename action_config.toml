@@ -11,11 +11,14 @@ context = "."
 #
 # For building docker image, set to false if not needed
 #
-# This expects to find these under github repo secrets
-# secrets.CONTAINER_REGISTRY_ACR_URL 
-# secrets.CONTAINER_REGISTRY_ACR_USERNAME
-# secrets.CONTAINER_REGISTRY_ACR_PASSWORD
-
+#
+# FIX ME:(if you are going to use docker config/do not have these as Organisation secrets like we do in Aibel)
+# 
+# Under settings/secrets and variables/repository secrets:
+# CONTAINER_REGISTRY_ACR_URL 
+# CONTAINER_REGISTRY_ACR_USERNAME
+# CONTAINER_REGISTRY_ACR_PASSWORD
+#
 
 [[tool.gitops]]
 enabled = false
@@ -32,12 +35,16 @@ image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]' #FIX ME!
 # USE ONLY ON TEST!!!
 # You need to enable docker if you plan to use this one.
 #
-# This expects to find these under github repo secrets
-# secrets.SSH_PRIVATE_KEY_GITOPS
-# This key needs to be a deploy key with write privileges
-#
-# How to create sshkey
+# FIX ME:(if you are going to use gitops)
+# 
+# Create a new ssh key
 # ssh-keygen -t ed25519 -C "email@whater.com"
+# 
+# Public key you add under gitops repo/deploy key
+# 
+# Private key you add under settings/secrets and variables/repository secrets
+# Name it SSH_PRIVATE_KEY_GITOPS
+#
 
 
 [tool.python]
@@ -53,13 +60,16 @@ version_toml = ["pyproject.toml:project.version"]
 # INFO
 #
 # This will generate a release  for your project if added
-# generate_release_auto.yaml expects to find this under github repo secrets
-# secrets.SSH_PRIVATE_KEY_SOURCE
-# This key needs to be a deploy key with write privileges on this source repository where you plan to do release
-# PS! do not enable Do not allow bypassing the above settings under branch protection, if you do we can not push
 #
-# How to create sshkey
+# FIX ME:
+# 
+# Create a new ssh key
 # ssh-keygen -t ed25519 -C "email@whater.com"
+# 
+# Public key you add under gitops repo/deploy key
+# 
+# Private key you add under settings/secrets and variables/repository secrets
+# Name it SSH_PRIVATE_KEY_SOURCE
 
 
 assets = []
