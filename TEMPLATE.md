@@ -2,7 +2,7 @@
 
 This setup is for strategy when you branch out with a fix/feat/chore branch, and do merge to main with PR
 
-See `action_config.toml` for docker/gitops config. Update it by following all the instructions given in the file(mentioned as comments).
+See `action_config.toml` for docker/gitops config. Update it by following all the instructions given in the file(mentioned as FIX ME).
 
 Note: Merge all your changes to main only with a PR, this will review all your settings.
 
