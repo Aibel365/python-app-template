@@ -12,7 +12,7 @@ context = "."
 # For building docker image, set to false if not needed
 #
 #
-# FIX ME:(if you are going to use docker config/do not have these as Organisation secrets like we do in Aibel)
+# FIX ME:(if you are going to use docker config/do not have these as Organisation secrets like we do in Aibel365)
 # 
 # Under settings/secrets and variables/repository secrets:
 # CONTAINER_REGISTRY_ACR_URL 
@@ -23,11 +23,11 @@ context = "."
 [[tool.gitops]]
 enabled = false
 name = "GitopsDeployment"
-repo = "Aibel365/app-python-gitops" #FIX ME!
-file = "cluster_test/test.yaml" #FIX ME!
+repo = "Aibel365/app-python-gitops" #FIX ME! <----
+file = "cluster_test/test.yaml" #FIX ME! <----
 kind = "Deployment"
 docker_ref = "ImageApp"
-image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]' #FIX ME!
+image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]' #FIX ME! <----
 
 # INFO:
 #
@@ -35,12 +35,12 @@ image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]' #FIX ME!
 # USE ONLY ON TEST!!!
 # You need to enable docker if you plan to use this one.
 #
-# FIX ME:(if you are going to use gitops)
+# FIX ME:(if you are going to use gitops) <----
 # 
 # Create a new ssh key
 # ssh-keygen -t ed25519 -C "email@whater.com"
 # 
-# Public key you add under gitops repo/deploy key
+# Public key you add under gitops repo as a deploy key
 # 
 # Private key you add under settings/secrets and variables/repository secrets
 # Name it SSH_PRIVATE_KEY_GITOPS
@@ -61,12 +61,12 @@ version_toml = ["pyproject.toml:project.version"]
 #
 # This will generate a release  for your project if added
 #
-# FIX ME:
+# FIX ME: <----
 # 
 # Create a new ssh key
 # ssh-keygen -t ed25519 -C "email@whater.com"
 # 
-# Public key you add under gitops repo/deploy key
+# Public key you add under source repo as a deploy key
 # 
 # Private key you add under settings/secrets and variables/repository secrets
 # Name it SSH_PRIVATE_KEY_SOURCE
