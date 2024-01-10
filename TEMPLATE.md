@@ -76,7 +76,7 @@ Note: If a label is missing in a PR then 'release-skip' label will be added by d
 
 <br />
 
-## Manual Worflows
+## Manual Workflows (info only)
 
 * __manual_dispatch_new_release.yaml__
     * Creates a new semantic release version based on last created.
