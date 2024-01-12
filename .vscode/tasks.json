@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "GENERATE_TEST",
+            "type": "shell",
+            "command": "git commit --allow-empty -m \"GENERATE_TEST\" && git push"
+        },
+        {
+            "label": "Check_code",
+            "type": "shell",
+            "command": ".\\venv\\Scripts\\activate && isort . && black ./src --config pyproject.toml && ruff ./src --fix"
+        },
+        {
+            "label": "Check_isort",
+            "type": "shell",
+            "command": ".\\venv\\Scripts\\activate && isort ."
+        },
+        {
+            "label": "Check_black",
+            "type": "shell",
+            "command": ".\\venv\\Scripts\\activate && black ./src --config pyproject.toml"
+        },
+        {
+            "label": "Check_ruff",
+            "type": "shell",
+            "command": ".\\venv\\Scripts\\activate && ruff ./src --fix"
+        }
+    ]
+}
