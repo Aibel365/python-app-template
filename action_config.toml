@@ -42,7 +42,9 @@ image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]' #FIX ME! <
 # 
 # Public key you add under gitops repo as a deploy key, with write access
 # 
-# Private key you add under settings/secrets and variables/repository secrets on source repo so github action have access
+# Private key you add under source repo:
+# "settings" -> "Security" -> "secrets and variables" -> "Actions" -> "repository secrets"
+# Click on button "New repository secret" (green one...)
 # Name it SSH_PRIVATE_KEY_GITOPS
 #
 
@@ -68,7 +70,9 @@ version_toml = ["pyproject.toml:project.version"]
 # 
 # Public key you add under source repo as a deploy key, with write access
 # 
-# Private key you add under settings/secrets and variables/repository secrets on source repo so github action have access
+# Private key you add under source repo:
+# "settings" -> "Security" -> "secrets and variables" -> "Actions" -> "repository secrets"
+# Click on button "New repository secret" (green one...)
 # Name it SSH_PRIVATE_KEY_SOURCE
 
 
