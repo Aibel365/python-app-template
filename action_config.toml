@@ -1,5 +1,5 @@
 [[tool.docker]]
-enabled = false
+enabled = false #FIX ME! (if you plan to use this)
 use_latest = true
 ref_name = "ImageApp"
 image_name = "app-python" #FIX ME!
@@ -21,7 +21,7 @@ context = "."
 #
 
 [[tool.gitops]]
-enabled = false
+enabled = false #FIX ME! (if you plan to use this, you need to enable docker if you plan to use this one.)
 name = "GitopsDeployment"
 repo = "Aibel365/app-python-gitops" #FIX ME! <----
 file = "cluster_test/test.yaml" #FIX ME! <----
