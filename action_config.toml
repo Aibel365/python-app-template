@@ -40,9 +40,9 @@ image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]' #FIX ME! <
 # Create a new ssh key
 # ssh-keygen -t ed25519 -C "email@whater.com"
 # 
-# Public key you add under gitops repo as a deploy key
+# Public key you add under gitops repo as a deploy key, with write access
 # 
-# Private key you add under settings/secrets and variables/repository secrets
+# Private key you add under settings/secrets and variables/repository secrets on source repo so github action have access
 # Name it SSH_PRIVATE_KEY_GITOPS
 #
 
@@ -66,9 +66,9 @@ version_toml = ["pyproject.toml:project.version"]
 # Create a new ssh key
 # ssh-keygen -t ed25519 -C "email@whater.com"
 # 
-# Public key you add under source repo as a deploy key
+# Public key you add under source repo as a deploy key, with write access
 # 
-# Private key you add under settings/secrets and variables/repository secrets
+# Private key you add under settings/secrets and variables/repository secrets on source repo so github action have access
 # Name it SSH_PRIVATE_KEY_SOURCE
 
 
