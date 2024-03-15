@@ -11,7 +11,7 @@
         {
             "label": "Check_code",
             "type": "shell",
-            "command": ".\\venv\\Scripts\\activate && isort . && black ./src --config pyproject.toml && ruff ./src --fix"
+            "command": ".\\venv\\Scripts\\activate && isort . && black ./src --config pyproject.toml && ruff check ./src --fix"
         },
         {
             "label": "Check_isort",
@@ -26,7 +26,7 @@
         {
             "label": "Check_ruff",
             "type": "shell",
-            "command": ".\\venv\\Scripts\\activate && ruff ./src --fix"
+            "command": ".\\venv\\Scripts\\activate && ruff check ./src --fix"
         }
     ]
 }
