@@ -49,6 +49,12 @@ image_path = '["spec"]["template"]["spec"]["containers"][0]["image"]' #FIX ME! <
 #
 
 
+[tool.python.lint]
+black_version = "24.4.2"
+ruff_version = "0.4.0"
+isort_version = "5.13.2"
+
+
 [tool.python]
 enabled = true
 # INFO
