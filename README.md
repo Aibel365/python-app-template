@@ -131,7 +131,7 @@ ofc, you need to run you application to make sure after..
 
 This is how you can run local linting if needed.
 - `pip install ruff black isort`
-- `ruff ./src --fix`
+- `ruff check ./src --fix`
 - `isort .`
 - `black ./src --config pyproject.toml`
 
