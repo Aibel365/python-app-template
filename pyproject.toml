@@ -5,12 +5,15 @@ authors = [{ name = "John Doe", email = "john.doe@whoknows.com" }]
 
 [tool.ruff]
 line-length = 120
+exclude = ["examples/", ".pixi/", "temp/"]
 
 [tool.black]
 line-length = 120
 
 [tool.isort]
 profile = "black"
+skip = [".pixi", "temp"]
+skip_glob=["**/temp/**"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -42,7 +45,7 @@ pytest = "==8.3.4"
 rattler-build = "*"
 
 [tool.pixi.feature.lint.tasks]
-lint = { cmd = ["isort", "ruff", "black"] }
+lint = { cmd = ["isort", ".","&&", "black",".","--config","pyproject.toml","&&", "ruff", "check","."] }
 
 [tool.pixi.feature.test.tasks]
 test = { cmd = ["pytest", "tests"] }

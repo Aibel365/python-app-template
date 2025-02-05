@@ -9,4 +9,3 @@ def test_mock_environment(monkeypatch):
 
     # Check that the environment variable is set
     assert env_variable_01 == "mocked_value"
-
