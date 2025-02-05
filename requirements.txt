@@ -1,4 +1,0 @@
-﻿isort==5.13.2
-load-dotenv==0.1.0
-ruff==0.4.0
-black==24.4.2

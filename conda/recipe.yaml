@@ -1,0 +1,43 @@
+schema_version: 1
+
+context:
+  version: "1.0.0"
+  name: python-app-template
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  path: ../
+
+build:
+  number: 0
+  noarch: python
+  script:
+    - python -m pip install . --no-deps -vv
+
+requirements:
+  host:
+    - pip
+    - setuptools
+    - python
+  run:
+    - python
+    - python-dotenv
+
+tests:
+  - python:
+      imports:
+        - app
+      pip_check: false
+
+about:
+  homepage: https://github.com/AibelDevs/python-app-template
+  license: GPL-3.0-or-later
+  summary: Python App template
+
+extra:
+  recipe-maintainers:
+    - Krande
+

@@ -63,14 +63,20 @@ All pull request will need to start with fix/feat/chore, and you need to label i
 
 ## 👶First time using this project (local git clone)
 
-If you use `vscode` then go under under extension tab, search `@recommended` and install them
+Install [pixi](https://pixi.sh/latest/)
 
-- Create virtual environment: `python -m venv ./venv`
-- Activate virtual environment: `./venv/Scripts/activate`
-- Install dependencies: `pip install -r requirements.txt`
 - Add `.env` file (see own section)
-- Start application: `python ./src/main.py`
-- ... open webpage ?
+- To run test code: `pixi run start`
+- To test the code: `pixi run test`
+- To build the docker image: `pixi run build-docker` (assumes you have docker installed)
+- To run the docker image: `pixi run start-docker`
+- To open a development shell inside your docker container: `pixi run shell`
+- To build a conda package of your python module: `pixi run build-conda` (see the created `output/` folder)
+
+Note! If you don't have docker installed in your Windows os, but inside a wsl you can do
+- `pixi run build-docker-wsl`
+- `pixi run start-docker-wsl`
+- `pixi run shell-wsl`
 
 <br/><br/><br/>
 
