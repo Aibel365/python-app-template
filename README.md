@@ -8,12 +8,80 @@
 
 Write something useful about the app/script you are making, what it does/solves.
 
-<br/><br/>
+## 👶First time using this project (local git clone)
 
-#### 🧑‍🏭 Work in progress
-* [ ] todo 1
-* [ ] todo 2
-* [ ] todo 3
+Install [pixi](https://pixi.sh/latest/)
+
+- If your code uses environment variables, you can add a `.env` file (see own section) for local development.
+- To run the code: `pixi run start`
+- To test the code: `pixi run test`
+- To build the docker image: `pixi run build-docker` (assumes you have docker installed)
+- To run the docker image: `pixi run start-docker`
+- To open a development shell inside your docker container: `pixi run shell`
+- To build a conda package of your python module: `pixi run build-conda` (see the created `output/` folder)
+
+Note! If you don't have docker installed in your Windows os but inside a wsl you can do
+- `pixi run build-docker-wsl`
+- `pixi run start-docker-wsl`
+- `pixi run shell-wsl`
+
+<br/><br/><br/>
+
+## 👶First time using this project (dev container vscode)
+
+Install vscode extension `ms-vscode-remote.remote-containers`
+
+* click bottom left corner `Open a Remote Window`, looks like 2 arrows
+* select `repository`
+* select `Open Repository from github`.
+* sign inn if needed
+* search for `python-app-template` and open it
+* when its loaded, click button left corner again
+* now select `Continue Working in Container Volume`
+
+<br/><br/><br/>
+
+## 🐛 Debug vscode issues:
+
+If you are not able to debug, do this:
+* use keys SHIFT + CONTROL + P
+* select `Python: Select interpreter`
+* then select `venv` (you might need restart..)
+
+Now be able to start debug of `main.py`
+
+## 🔬 Linting code:
+
+This is how you can run local linting if needed.
+- `pixi run lint`
+
+You should run this before you do any pull request, and make sure you score 10 of 10
+
+<br/><br/><br/>
+
+## 🗺️ Add `.env` file
+
+- add `.env` file
+
+Add important:
+
+```bash
+ENV_VARIABLE_01="Fill out something..."
+```
+
+There is more you can use, but project is setup with correct defaults, to save time.
+
+```bash
+
+# DATABASE
+ENV_VARIABLE_02="hello2"    # default: something
+
+# AZURE
+ENV_VARIABLE_02="hello2"    # default: something
+
+# SOMETHING ELSE
+ENV_VARIABLE_03="hello3"    # default: something
+```
 
 
 <br/><br/><br/>
@@ -60,113 +128,3 @@ This project also forces `Squash merge`, so all your commits in a branch will on
 All pull request will need to start with fix/feat/chore, and you need to label it with a release label. We also run pylint and a few other checks on you code.
 
 <br/><br/><br/>
-
-## 👶First time using this project (local git clone)
-
-Install [pixi](https://pixi.sh/latest/)
-
-- Add `.env` file (see own section)
-- To run test code: `pixi run start`
-- To test the code: `pixi run test`
-- To build the docker image: `pixi run build-docker` (assumes you have docker installed)
-- To run the docker image: `pixi run start-docker`
-- To open a development shell inside your docker container: `pixi run shell`
-- To build a conda package of your python module: `pixi run build-conda` (see the created `output/` folder)
-
-Note! If you don't have docker installed in your Windows os, but inside a wsl you can do
-- `pixi run build-docker-wsl`
-- `pixi run start-docker-wsl`
-- `pixi run shell-wsl`
-
-<br/><br/><br/>
-
-## 👶First time using this project (dev container vscode)
-
-Install vscode extension `ms-vscode-remote.remote-containers`
-
-* click bottom left corner `Open a Remote Window`, looks like 2 arrows
-* select `repository`
-* select `Open Repository from github`.
-* sign inn if needed
-* search for `python-app-template` and open it
-* when its loaded, click button left corner again
-* now select `Continue Working in Container Volume`
-
-<br/><br/><br/>
-
-## 👴🏻 Not first time using this project:
-
-Next time only run 
-- Activate virtual environment: `./venv/Scripts/activate`
-- Start application: `python ./src/main.py`
-- ...open web page ? 
-
-<br/><br/><br/>
-
-## 🐛 Debug vscode issues:
-
-If you are not able to debug, do this:
-* use keys SHIFT + CONTROL + P
-* select `Python: Select interpreter`
-* then select `venv` (you might need restart..)
-
-Now be able to start debug of `main.py`
-
-
-
-<br/><br/><br/>
-
-## 🧊 Freeze dep, if you add new new python modules:
-
-If you add new dependencies remember to update requirements.txt
-
-Option 1:(will add all in virtual env)
-- `pip freeze > requirements.txt`
-
-Option 2: (only whats needed)
-- `pip install pipreqs`
-- `pipreqs ./ --force`
-
-
-ofc, you need to run you application to make sure after..
-
-
-<br/><br/><br/>
-
-## 🔬 Linting code:
-
-This is how you can run local linting if needed.
-- `pip install ruff black isort`
-- `ruff check ./src --fix`
-- `isort .`
-- `black ./src --config pyproject.toml`
-
-
-
-You should run this before you do any pull request, and make sure you score 10 of 10
-
-<br/><br/><br/>
-
-## 🗺️ Add `.env` file
-
-- add `.env` file
-
-Add important:
-
-```bash
-ENV_VARIABLE_01="Fill out something..."
-```
-
-There is more you can use, but project is setup with correct defaults, to save time.
-
-```bash
-
-# DATABASE
-ENV_VARIABLE_02="hello2"    # default: something
-
-# AZURE
-ENV_VARIABLE_02="hello2"    # default: something
-
-# SOMETHING ELSE
-ENV_VARIABLE_03="hello3"    # default: something
-```
