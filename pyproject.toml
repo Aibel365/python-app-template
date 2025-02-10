@@ -3,12 +3,63 @@ name = "app-python"
 version = "1.0.0"
 authors = [{ name = "John Doe", email = "john.doe@whoknows.com" }]
 
-
 [tool.ruff]
 line-length = 120
+exclude = ["examples/", ".pixi/", "temp/"]
 
 [tool.black]
 line-length = 120
 
 [tool.isort]
 profile = "black"
+skip = [".pixi", "temp"]
+skip_glob=["**/temp/**"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64"]
+
+[tool.pixi.environments]
+prod = { features = ["prod"], solve-group="prod", no-default-feature = true }
+lint = { features = ["lint"], no-default-feature = true }
+test = { features = ["test"], solve-group="prod", no-default-feature = true }
+conda = { features = ["conda"], solve-group="conda", no-default-feature = true }
+
+[tool.pixi.feature.prod.dependencies]
+python = "==3.12.8"
+python-dotenv = "==1.0.1"
+
+[tool.pixi.feature.lint.dependencies]
+isort = "==5.13.2"
+ruff = "==0.4.0"
+black = "==24.4.2"
+
+[tool.pixi.feature.test.dependencies]
+pytest = "==8.3.4"
+
+[tool.pixi.feature.conda.dependencies]
+rattler-build = "*"
+
+[tool.pixi.feature.lint.tasks]
+lint = { cmd = ["isort", ".","&&", "black",".","--config","pyproject.toml","&&", "ruff", "check","."] }
+
+[tool.pixi.feature.test.tasks]
+test = { cmd = ["pytest", "tests"] }
+
+[tool.pixi.feature.conda.tasks]
+build-conda = { cmd = ["rattler-build", "build", "-r", "conda/recipe.yaml"] }
+
+[tool.pixi.feature.prod.tasks]
+start = { cmd = ["python", "src/main.py"], description = "Start the application" }
+build-docker = { cmd = ["docker", "build", "-t", "app-python", "."], description = "Build the Docker image" }
+start-docker = { cmd = ["docker", "run", "-it", "app-python"], description = "Run the Docker container" }
+shell = { cmd = ["docker", "run", "-it", "app-python", "bash"], description = "Run a bash shell in the Docker container" }
+
+# Add WSL tasks (if you don't have rancher installed)
+build-docker-wsl = { cmd = ["wsl", "docker", "build", "-t", "app-python", "."], description = "Build the Docker image using WSL" }
+start-docker-wsl = { cmd = ["wsl", "docker", "run", "-it", "app-python"], description = "Run the Docker container using WSL" }
+shell-wsl = { cmd = ["wsl", "docker", "run", "-it", "app-python", "bash"], description = "Run a bash shell in the Docker container using WSL" }
