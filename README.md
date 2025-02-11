@@ -25,19 +25,6 @@ Note! If you don't have docker installed in your Windows os but inside a wsl you
 - `pixi run start-docker-wsl`
 - `pixi run shell-wsl`
 
-<br/><br/><br/>
-
-## 👶First time using this project (dev container vscode)
-
-Install vscode extension `ms-vscode-remote.remote-containers`
-
-* click bottom left corner `Open a Remote Window`, looks like 2 arrows
-* select `repository`
-* select `Open Repository from github`.
-* sign inn if needed
-* search for `python-app-template` and open it
-* when its loaded, click button left corner again
-* now select `Continue Working in Container Volume`
 
 <br/><br/><br/>
 
@@ -46,7 +33,7 @@ Install vscode extension `ms-vscode-remote.remote-containers`
 If you are not able to debug, do this:
 * use keys SHIFT + CONTROL + P
 * select `Python: Select interpreter`
-* then select `venv` (you might need restart..)
+* now you need to enter interpreter path, select .pixi root, and env you are using
 
 Now be able to start debug of `main.py`
 
@@ -83,48 +70,3 @@ ENV_VARIABLE_02="hello2"    # default: something
 ENV_VARIABLE_03="hello3"    # default: something
 ```
 
-
-<br/><br/><br/>
-
-## 💡Info
-
-* See [gitops repo](https://github.com/Aibel365/ue-something-gitops) for link to deployment/vault etc
-* See `pyproject.toml` for contact info/open api tag info
-* See `action_config.toml` for gitops/docker config
-
-
-<br/><br/><br/>
-
-## 🔗Links
-
-Common:
-* [wiki](https://github.com)
-* [gitops](https://github.com)
-
-Test:
-* [app web](https://github.com)
-* [swagger web](https://github.com)
-* [argocd](https://github.com)
-* [grafana](https://github.com)
-* [vault](https://github.com)
-
-Prod:
-* [app web](https://github.com)
-* [swagger web](https://github.com)
-* [argocd](https://github.com)
-* [grafana](https://github.com)
-* [vault](https://github.com)
-
-
-
-<br/><br/><br/>
-
-## ✍️ How to update code
-
-This project uses protected main branch. So all updates have to go through [pull request](https://www.youtube.com/watch?v=8lGpZkjnkt4).
-
-This project also forces `Squash merge`, so all your commits in a branch will only be 1 commit on main, so please try and stick to 1 fix or feature per pull request if possible.
-
-All pull request will need to start with fix/feat/chore, and you need to label it with a release label. We also run pylint and a few other checks on you code.
-
-<br/><br/><br/>
