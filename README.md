@@ -8,6 +8,10 @@
 
 Write something useful about the app/script you are making, what it does/solves.
 
+
+
+<br/><br/><br/>
+
 ## 👶First time using this project (local git clone)
 
 Install [pixi](https://pixi.sh/latest/)
@@ -26,6 +30,7 @@ Note! If you don't have docker installed in your Windows os but inside a wsl you
 - `pixi run shell-wsl`
 
 
+
 <br/><br/><br/>
 
 ## 🐛 Debug vscode issues:
@@ -37,12 +42,16 @@ If you are not able to debug, do this:
 
 Now be able to start debug of `main.py`
 
+<br/><br/><br/>
+
 ## 🔬 Linting code:
 
 This is how you can run local linting if needed.
 - `pixi run lint`
 
 You should run this before you do any pull request, and make sure you score 10 of 10
+
+
 
 <br/><br/><br/>
 
